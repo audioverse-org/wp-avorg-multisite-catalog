@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       AudioVerse Catalog
  * Plugin URI:        https://github.com/AVORG/wp-avorg-multisite-catalog
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Access to the AudioVerse Catalog by tags, using WP short codes.
  * Version:           1.0.0
  * Author:            Ki Song
  * Author URI:        https://www.audioverse.org
