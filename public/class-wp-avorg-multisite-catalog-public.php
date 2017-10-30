@@ -100,4 +100,66 @@ class Wp_Avorg_Multisite_Catalog_Public {
 
 	}
 
+	function show_list( $atts ) {
+		$url = 'https://api2.audioverse.org/recordings';
+		$user = 'audioverse';
+		$pass = 'j3$u$l0v3sM3';
+		$args = array(
+		  'headers' => array(
+		    'Authorization' => 'Basic ' . base64_encode( $user . ':' . $pass )
+		  )
+		);
+
+		$response = wp_remote_get( esc_url_raw( $url ), $args );
+		$recordings = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		?>
+
+	  <div class='grid' id="avgrid">
+	    
+		  <?php foreach( $recordings['result'] as $recording ) { ?>
+		    <div class="cell">
+					<img src="http://placehold.it/800x800" class="responsive-image">
+					<div class="inner-content">
+						<div class="title"><?php echo $recording['recordings']['title'] ?></div>
+						<div class="subtitle">Subtitle</div>
+					</div>
+				</div>
+		  <?php } ?>
+	    
+	  </div>
+	
+		<div class="show-more">
+			<?php $options = get_option($this->plugin_name); ?>
+			<a href="javascript:void(0)" onclick="getRecordings(this)" data-items-per-page="<?php echo $options['itemsPerPage']?>">Show more</a>
+		</div>
+
+		<?php
+	}
+	
+	function getRecordings( $data ) {
+		$url = 'https://api2.audioverse.org/recordings';
+		if ( isset($data['start']) ) {
+			$url .= '?start=' . $data['start'];
+		}
+		
+		$user = 'audioverse';
+		$pass = 'j3$u$l0v3sM3';
+		$args = array(
+		  'headers' => array(
+		    'Authorization' => 'Basic ' . base64_encode( $user . ':' . $pass )
+		  )
+		);
+
+		$response = wp_remote_get( esc_url_raw( $url ), $args );
+		return json_decode( wp_remote_retrieve_body( $response ), true );
+	}
+	
+	function recordings_api() {
+	  register_rest_route( $this->plugin_name . '/v1', '/tags/(?P<site>\w+)/category/(?P<category>\w+)', array(
+	    'methods' => 'GET',
+	    'callback' => array( $this, 'getRecordings'),
+	  ) );
+	}
+
 }

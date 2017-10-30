@@ -30,3 +30,21 @@
 	 */
 
 })( jQuery );
+
+var startIndex = 0;
+
+function getRecordings(e) {
+	startIndex += parseInt(e.getAttribute('data-items-per-page'));
+	fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags/casa1/category/casa2&start=' + startIndex).then(function(response){
+		return response.json();
+	}).then(function(response){
+		showRecordings(response);
+	});
+}
+
+function showRecordings( data ) {
+	// console.log('data', data);
+	for (const item of data.result) {
+		jQuery("#avgrid").append('<div class="cell"><img src="http://placehold.it/800x800" class="responsive-image"><div class="inner-content"><div class="title">' + item.recordings.title + '</div><div class="subtitle">Subtitle</div></div></div>')
+	}
+}
