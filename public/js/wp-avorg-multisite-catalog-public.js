@@ -33,6 +33,11 @@
 
 var startIndex = 0;
 
+/**
+ * fetch the recordings
+ * 
+ * @param	object	e	event data
+ */
 function getRecordings(e) {
 	startIndex += parseInt(e.getAttribute('data-items-per-page'));
 	fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags/casa1/category/casa2&start=' + startIndex).then(function(response){
@@ -42,9 +47,33 @@ function getRecordings(e) {
 	});
 }
 
+/**
+ * show the recordings
+ * 
+ * @param	array	data	recordings
+ */
 function showRecordings( data ) {
 	// console.log('data', data);
-	for (const item of data.result) {
-		jQuery("#avgrid").append('<div class="cell"><img src="http://placehold.it/800x800" class="responsive-image"><div class="inner-content"><div class="title">' + item.recordings.title + '</div><div class="subtitle">Subtitle</div></div></div>')
+	data.result.forEach(function(element, index) {
+		jQuery("#avgrid").append('<div class="cell"><img src="//unsplash.it/' + (800 + index ) + '/500" class="responsive-image"><div class="inner-content"><div class="title">' + element.recordings.title + '</div><div class="subtitle">' + get_speaker_name(element.recordings) + '</div></div></div>');
+	});
+}
+
+/**
+ * gets the speaker's name
+ * 
+ * @param	object	$item	recording data
+ */
+function get_speaker_name(item) {
+	var speaker = 'Anonymous Presenter';
+	
+	if ( item.presenters ) {
+		if ( item.presenters.length > 1 ) {
+			speaker = 'Various Presenters';
+		} else if ( item.presenters.length > 0 ) {
+			speaker = item.presenters[0].givenName + ' ' + item.presenters[0].surname;
+		}
 	}
+	
+	return speaker;
 }

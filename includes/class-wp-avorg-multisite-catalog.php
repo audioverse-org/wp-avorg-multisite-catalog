@@ -182,7 +182,11 @@ class Wp_Avorg_Multisite_Catalog {
 		
 		$this->loader->add_action( 'rest_api_init', $plugin_public, 'recordings_api' );
 
-		$this->loader->add_shortcode( 'av_list', $plugin_public, 'show_list' );
+		$this->loader->add_shortcode( 'list', $plugin_public, 'get_list' );
+		$this->loader->add_shortcode( 'recording_media', $plugin_public, 'get_recording_media' );
+		$this->loader->add_shortcode( 'recording_title', $plugin_public, 'get_recording_title' );
+		$this->loader->add_shortcode( 'recording_desc', $plugin_public, 'get_recording_desc' );
+		$this->loader->add_shortcode( 'recording_speaker', $plugin_public, 'get_recording_speaker' );
 
 	}
 
