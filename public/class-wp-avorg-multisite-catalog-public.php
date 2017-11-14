@@ -203,7 +203,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_media( $atts ) {
-		if ( isset( $_GET['recording_id'] ) ) {
+		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
 			$response = $this->get_recording($_GET['recording_id']);
 			
 			return '
@@ -226,7 +226,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_title( $atts ) {
-		if ( isset( $_GET['recording_id'] ) ) {
+		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
 			$response = $this->get_recording($_GET['recording_id']);
 			return '<h1>' . $response['title'] . '</h1>';
 		} else {
@@ -240,7 +240,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_desc( $atts ) {
-		if ( isset( $_GET['recording_id'] ) ) {
+		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
 			$response = $this->get_recording($_GET['recording_id']);
 			return '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>';
 		} else {
@@ -254,7 +254,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_speaker( $atts ) {
-		if ( isset( $_GET['recording_id'] ) ) {
+		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
 			return $this->get_speaker_name( $this->get_recording($_GET['recording_id']) );
 		} else {
 			return 'No recording id';
