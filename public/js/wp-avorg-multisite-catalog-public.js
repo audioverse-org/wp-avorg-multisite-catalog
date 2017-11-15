@@ -40,10 +40,11 @@ var startIndex = 0;
  */
 function getRecordings(e) {
 	startIndex += parseInt(e.getAttribute('data-items-per-page'));
+	var detailPageURL = e.getAttribute('data-detail-page-url');
 	fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags/casa1/category/casa2&start=' + startIndex).then(function(response){
 		return response.json();
 	}).then(function(response){
-		showRecordings(response);
+		showRecordings(response, detailPageURL);
 	});
 }
 
@@ -52,10 +53,10 @@ function getRecordings(e) {
  * 
  * @param	array	data	recordings
  */
-function showRecordings( data ) {
+function showRecordings( data, detailPageURL ) {
 	// console.log('data', data);
 	data.result.forEach(function(element, index) {
-		jQuery("#avgrid").append('<div class="cell"><img src="//unsplash.it/' + (800 + index ) + '/500" class="responsive-image"><div class="inner-content"><div class="title">' + element.recordings.title + '</div><div class="subtitle">' + get_speaker_name(element.recordings) + '</div></div></div>');
+		jQuery("#avgrid").append('<div class="cell"><a href="' + detailPageURL + element.recordings.id + '"><img src="//unsplash.it/' + (800 + index ) + '/500" class="responsive-image"><div class="inner-content"><div class="title">' + element.recordings.title + '</div><div class="subtitle">' + get_speaker_name(element.recordings) + '</div></div></a></div>');
 	});
 }
 

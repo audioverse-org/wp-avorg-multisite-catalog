@@ -162,10 +162,15 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 	 */
 	public function validate($input) {
 	    // All checkboxes inputs        
-	    $valid = array();
+		$valid = array();
+		
+		$valid['baseURL'] = (isset($input['baseURL']) && !empty($input['baseURL'])) ? sanitize_text_field($input['baseURL']) : '';
+		$valid['user'] = (isset($input['user']) && !empty($input['user'])) ? sanitize_text_field($input['user']) : '';
+		$valid['password'] = (isset($input['password']) && !empty($input['password'])) ? sanitize_text_field($input['password']) : '';
 
-			$valid['tags'] = (isset($input['tags']) && !empty($input['tags'])) ? sanitize_text_field($input['tags']) : '';
-			$valid['itemsPerPage'] = (isset($input['itemsPerPage']) && !empty($input['itemsPerPage'])) ? sanitize_text_field($input['itemsPerPage']) : '';
+		$valid['detailPageURL'] = (isset($input['detailPageURL']) && !empty($input['detailPageURL'])) ? sanitize_text_field($input['detailPageURL']) : '';
+		$valid['tags'] = (isset($input['tags']) && !empty($input['tags'])) ? sanitize_text_field($input['tags']) : '';
+		$valid['itemsPerPage'] = (isset($input['itemsPerPage']) && !empty($input['itemsPerPage'])) ? sanitize_text_field($input['itemsPerPage']) : '';
 
 	    return $valid;
 	}

@@ -106,16 +106,20 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	string	$url	The url to be fetched
 	 */
 	function fetch_from_api( $url ) {
-		$base = 'https://api2.audioverse.org/';
-		$user = 'audioverse';
-		$pass = 'j3$u$l0v3sM3';
+		
+		$options = get_option($this->plugin_name);
+
+		$baseURL = array_key_exists('baseURL', $options) ? $options['baseURL'] : '';
+		$user = array_key_exists('user', $options) ? $options['user'] : '';
+		$password = array_key_exists('password', $options) ? $options['password'] : '';
+
 		$args = array(
 		  'headers' => array(
-		    'Authorization' => 'Basic ' . base64_encode( $user . ':' . $pass )
+		    'Authorization' => 'Basic ' . base64_encode( $user . ':' . $password )
 		  )
 		);
 
-		$url = $base . $url;
+		$url = $baseURL . $url;
 
 		$response = wp_remote_get( esc_url_raw( $url ), $args );
 		return json_decode( wp_remote_retrieve_body( $response ), true );
@@ -168,6 +172,18 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_list( $atts ) {
+
+		$options = get_option($this->plugin_name);
+		$detailPageURL = array_key_exists('detailPageURL', $options) ? $options['detailPageURL'] : '';
+		$query = parse_url($detailPageURL, PHP_URL_QUERY);
+		$hasParameters = false;
+		
+		// Returns a string if the URL has parameters or NULL if not
+		if ( $query ) {
+			$detailPageURL .= '&recording_id=';
+		} else {
+			$detailPageURL .= '?recording_id=';
+		}
 		
 		$recordings = $this->get_recordings();
 
@@ -176,7 +192,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		foreach( $recordings['result'] as $key=>$recording ) {
 			$html .= '
 			<div class="cell">
-				<a href="?page_id=104&recording_id=' . $recording['recordings']['id'] . '">
+				<a href="' . $detailPageURL . $recording['recordings']['id'] . '">
 					<img src="//unsplash.it/' . (800 + $key) . '/500" class="responsive-image">
 					<div class="inner-content">
 						<div class="title">' . $recording['recordings']['title'] . '</div>
@@ -191,7 +207,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$options = get_option($this->plugin_name);
 		$html .= '
 		<div class="show-more">
-			<a href="javascript:void(0)" onclick="getRecordings(this)" data-items-per-page="' . $options['itemsPerPage'] . '">Show more</a>
+			<a href="javascript:void(0)" onclick="getRecordings(this)" data-items-per-page="' . $options['itemsPerPage'] . '" data-detail-page-url="' . $detailPageURL . '">Show more</a>
 		</div>';
 		
 		return $html;
