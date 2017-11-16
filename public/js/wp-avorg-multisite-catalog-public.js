@@ -56,25 +56,6 @@ function getRecordings(e) {
 function showRecordings( data, detailPageURL ) {
 	// console.log('data', data);
 	data.result.forEach(function(element, index) {
-		jQuery("#avgrid").append('<div class="cell"><a href="' + detailPageURL + element.recordings.id + '"><img src="//unsplash.it/' + (800 + index ) + '/500" class="responsive-image"><div class="inner-content"><div class="title">' + element.recordings.title + '</div><div class="subtitle">' + get_speaker_name(element.recordings) + '</div></div></a></div>');
+		jQuery("#avgrid").append('<div class="cell"><a href="' + detailPageURL + element.recordings.id + '"><img src="//unsplash.it/' + (800 + index ) + '/500" class="responsive-image"><div class="duration">' + element.recordings.duration_formatted + '</div><div class="inner-content"><div class="title">' + element.recordings.title + '</div><div class="subtitle">' + element.recordings.speaker_name + '</div></div><div class="overlay"><div class="text">' + element.recordings.description + '</div></div></a></div>');
 	});
-}
-
-/**
- * gets the speaker's name
- * 
- * @param	object	$item	recording data
- */
-function get_speaker_name(item) {
-	var speaker = 'Anonymous Presenter';
-	
-	if ( item.presenters ) {
-		if ( item.presenters.length > 1 ) {
-			speaker = 'Various Presenters';
-		} else if ( item.presenters.length > 0 ) {
-			speaker = item.presenters[0].givenName + ' ' + item.presenters[0].surname;
-		}
-	}
-	
-	return speaker;
 }

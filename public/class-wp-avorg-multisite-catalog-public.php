@@ -136,7 +136,15 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			$url .= '?start=' . $data['start'];
 		}
 
-		return $this->fetch_from_api($url);
+		$recordings = $this->fetch_from_api($url);
+		foreach( $recordings['result'] as $key=>$recording ) {
+			$duration_info = getdate($recording['recordings']['duration']);
+			$format = $duration_info['hours'] > 0 ? 'H:i:s' : 'i:s';
+			$recordings['result'][$key]['recordings']['duration_formatted'] = gmdate($format, $recording['recordings']['duration']);
+			$recordings['result'][$key]['recordings']['speaker_name'] = $this->get_speaker_name( $recording['recordings'] );
+		}
+
+		return $recordings;
 	}
 
 	/**
@@ -190,13 +198,18 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$html = '<div class="grid" id="avgrid">';
 			
 		foreach( $recordings['result'] as $key=>$recording ) {
+			$recording['recordings']['description'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
 			$html .= '
 			<div class="cell">
 				<a href="' . $detailPageURL . $recording['recordings']['id'] . '">
 					<img src="//unsplash.it/' . (800 + $key) . '/500" class="responsive-image">
+					<div class="duration">' . $recording['recordings']['duration_formatted'] . '</div>
 					<div class="inner-content">
 						<div class="title">' . $recording['recordings']['title'] . '</div>
-						<div class="subtitle">' . $this->get_speaker_name( $recording['recordings'] ) . '</div>
+						<div class="subtitle">' . $recording['recordings']['speaker_name'] . '</div>
+					</div>
+					<div class="overlay">
+						<div class="text">' . $recording['recordings']['description'] . '</div>
 					</div>
 				</a>
 			</div>';
