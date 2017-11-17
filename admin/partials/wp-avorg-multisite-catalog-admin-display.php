@@ -25,12 +25,15 @@
     <?php
       $options = get_option($this->plugin_name);
 
-      $baseURL = array_key_exists('baseURL', $options) ? $options['baseURL'] : '';
+      $baseURLFormerAPI = array_key_exists('baseURLFormerAPI', $options) ? $options['baseURLFormerAPI'] : '';
       $user = array_key_exists('user', $options) ? $options['user'] : '';
       $password = array_key_exists('password', $options) ? $options['password'] : '';
 
+      $baseURL = array_key_exists('baseURL', $options) ? $options['baseURL'] : '';
+      $token = array_key_exists('token', $options) ? $options['token'] : '';
+
       $detailPageURL = array_key_exists('detailPageURL', $options) ? $options['detailPageURL'] : '';
-      $tags = array_key_exists('tags', $options) ? $options['tags'] : '';
+      $site = array_key_exists('site', $options) ? $options['site'] : '';
       $itemsPerPage = array_key_exists('itemsPerPage', $options) ? $options['itemsPerPage'] : '';
     ?>
 
@@ -43,8 +46,8 @@
     <table class="form-table">
       <tbody>
         <tr>
-          <th scope="row"><label for="baseURL">Base URL</label></th>
-          <td><input name="<?php echo $this->plugin_name;?>[baseURL]" type="text" id="baseURL" aria-describedby="tag-description" value="<?php echo $baseURL;?>" class="regular-text">
+          <th scope="row"><label for="baseURLFormerAPI">Base URL former API</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[baseURLFormerAPI]" type="text" id="baseURLFormerAPI" aria-describedby="tag-description" value="<?php echo $baseURLFormerAPI;?>" class="regular-text">
         </tr>
         <tr>
           <th scope="row"><label for="user">User</label></th>
@@ -53,6 +56,14 @@
         <tr>
           <th scope="row"><label for="password">Password</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[password]" type="password" id="password" value="<?php echo $password;?>" class="regular-text">
+        </tr>
+        <tr>
+          <th scope="row"><label for="baseURL">Base URL new API</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[baseURL]" type="text" id="baseURL" aria-describedby="tag-description" value="<?php echo $baseURL;?>" class="regular-text">
+        </tr>
+        <tr>
+          <th scope="row"><label for="token">Bearer token</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[token]" type="text" id="token" value="<?php echo $token;?>" class="regular-text">
         </tr>
       </tbody>
     </table>
@@ -65,9 +76,8 @@
           <p class="description" id="tag-description"><?php esc_attr_e( 'This is the page that will be shown when the user click a recording', $this->plugin_name ); ?></p></td>
         </tr>
         <tr>
-          <th scope="row"><label for="tags">Tags</label></th>
-          <td><input name="<?php echo $this->plugin_name;?>[tags]" type="text" id="tags" aria-describedby="tag-description" value="<?php echo $tags;?>" class="regular-text">
-          <p class="description" id="tag-description"><?php esc_attr_e( 'Comma separated tags.', $this->plugin_name ); ?></p></td>
+          <th scope="row"><label for="site">Site</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[site]" type="text" id="site" aria-describedby="tag-description" value="<?php echo $site;?>" class="regular-text">
         </tr>
         <tr>
           <th scope="row"><label for="itemsPerPage">Items per page</label></th>

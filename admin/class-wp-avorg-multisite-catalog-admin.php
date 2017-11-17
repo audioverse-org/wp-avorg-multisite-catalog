@@ -164,12 +164,15 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 	    // All checkboxes inputs        
 		$valid = array();
 		
-		$valid['baseURL'] = (isset($input['baseURL']) && !empty($input['baseURL'])) ? sanitize_text_field($input['baseURL']) : '';
+		$valid['baseURLFormerAPI'] = (isset($input['baseURLFormerAPI']) && !empty($input['baseURLFormerAPI'])) ? sanitize_text_field($input['baseURLFormerAPI']) : '';
 		$valid['user'] = (isset($input['user']) && !empty($input['user'])) ? sanitize_text_field($input['user']) : '';
 		$valid['password'] = (isset($input['password']) && !empty($input['password'])) ? sanitize_text_field($input['password']) : '';
+		
+		$valid['baseURL'] = (isset($input['baseURL']) && !empty($input['baseURL'])) ? sanitize_text_field($input['baseURL']) : '';
+		$valid['token'] = (isset($input['token']) && !empty($input['token'])) ? sanitize_text_field($input['token']) : '';
 
 		$valid['detailPageURL'] = (isset($input['detailPageURL']) && !empty($input['detailPageURL'])) ? sanitize_text_field($input['detailPageURL']) : '';
-		$valid['tags'] = (isset($input['tags']) && !empty($input['tags'])) ? sanitize_text_field($input['tags']) : '';
+		$valid['site'] = (isset($input['site']) && !empty($input['site'])) ? sanitize_text_field($input['site']) : '';
 		$valid['itemsPerPage'] = (isset($input['itemsPerPage']) && !empty($input['itemsPerPage'])) ? sanitize_text_field($input['itemsPerPage']) : '';
 
 	    return $valid;

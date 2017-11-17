@@ -180,7 +180,7 @@ class Wp_Avorg_Multisite_Catalog {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 		
-		$this->loader->add_action( 'rest_api_init', $plugin_public, 'recordings_api' );
+		$this->loader->add_action( 'rest_api_init', $plugin_public, 'rest_route_recordings' );
 
 		$this->loader->add_shortcode( 'list', $plugin_public, 'get_list' );
 		$this->loader->add_shortcode( 'recording_media', $plugin_public, 'get_recording_media' );

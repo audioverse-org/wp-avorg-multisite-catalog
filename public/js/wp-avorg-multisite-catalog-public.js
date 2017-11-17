@@ -31,21 +31,23 @@
 
 })( jQuery );
 
-var startIndex = 0;
-
 /**
  * fetch the recordings
  * 
  * @param	object	e	event data
  */
 function getRecordings(e) {
-	startIndex += parseInt(e.getAttribute('data-items-per-page'));
 	var detailPageURL = e.getAttribute('data-detail-page-url');
-	fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags/casa1/category/casa2&start=' + startIndex).then(function(response){
-		return response.json();
-	}).then(function(response){
-		showRecordings(response, detailPageURL);
-	});
+	var next = e.getAttribute('data-next');
+	if ( next != 'undefined' ) {
+		fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags&url=' + encodeURIComponent(next)).then(function(response){
+			return response.json();
+		}).then(function(response){
+			console.log(response);
+			document.getElementById('more').setAttribute('data-next', response.meta.pagination.links.next);
+			showRecordings(response, detailPageURL);
+		});
+	}
 }
 
 /**
@@ -55,7 +57,10 @@ function getRecordings(e) {
  */
 function showRecordings( data, detailPageURL ) {
 	// console.log('data', data);
-	data.result.forEach(function(element, index) {
-		jQuery("#avgrid").append('<div class="cell"><a href="' + detailPageURL + element.recordings.id + '"><img src="//unsplash.it/' + (800 + index ) + '/500" class="responsive-image"><div class="duration">' + element.recordings.duration_formatted + '</div><div class="inner-content"><div class="title">' + element.recordings.title + '</div><div class="subtitle">' + element.recordings.speaker_name + '</div></div><div class="overlay"><div class="text">' + element.recordings.description + '</div></div></a></div>');
+	var imageUrl, imageName, detailPage;
+	data.data.forEach(function(element, index) {
+		imageUrl = element.site_image ? element.site_image.url  + '/800/500/' + element.site_image.file : '';
+		detailPage = detailPageURL + element.id + '&image=' + imageUrl;
+		jQuery("#avgrid").append('<div class="cell"><a href="' + detailPage + '"><img src="' + imageUrl + '" class="responsive-image"><div class="duration">' + element.duration_formatted + '</div><div class="inner-content"><div class="title">' + element.title + '</div><div class="subtitle">' + element.speaker_name + '</div></div><div class="overlay"><div class="text">' + element.description + '</div></div></a></div>');
 	});
 }
