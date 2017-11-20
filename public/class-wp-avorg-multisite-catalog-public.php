@@ -242,10 +242,12 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			<div class="cell">
 				<a href="' . $detailPage . '">
 					<img src="' . $imageUrl . '" class="responsive-image">
-					<div class="duration">' . $recording['duration_formatted'] . '</div>
-					<div class="inner-content">
-						<div class="title">' . $recording['title'] . '</div>
-						<div class="subtitle">' . $recording['speaker_name'] . '</div>
+					<div class="backdrop">
+						<div class="duration">' . $recording['duration_formatted'] . '</div>
+						<div class="inner-content">
+							<div class="title">' . $recording['title'] . '</div>
+							<div class="subtitle">' . $recording['speaker_name'] . '</div>
+						</div>
 					</div>
 					<div class="overlay">
 						<div class="text">' . $recording['description'] . '</div>
