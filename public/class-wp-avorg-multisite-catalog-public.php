@@ -134,9 +134,6 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$params .= ( $query ? '&' : '?' ) . 'per_page=' . $itemsPerPage;
 
 		$url = $baseURL . $site . $params;
-		if ( isset($data['start']) ) {
-			$url .= '?start=' . $data['start'];
-		}
 
 		$headers = array('Authorization' => 'Bearer ' . $token);
 
