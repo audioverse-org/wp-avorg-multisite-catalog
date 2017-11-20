@@ -106,13 +106,17 @@
   font-size: 1.5em;
   -webkit-box-orient: vertical;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 5;
   overflow: hidden;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
+}
+
+.text p {
+  margin-bottom: 0 !important
 }
 
 /* responsive video */
