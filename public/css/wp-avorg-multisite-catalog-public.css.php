@@ -12,7 +12,6 @@ $options = get_option('wp-avorg-multisite-catalog');
  */
 
 .responsive-image {
-  /* max-width: 100%; */
   width: 100%;
   height: 100%
 }
@@ -20,7 +19,8 @@ $options = get_option('wp-avorg-multisite-catalog');
 .cell {
   position: relative;
   background-color: #ccc;
-  height: 500px
+  max-height: 500px;
+  overflow: hidden
 }
 
 .cell img {
@@ -28,7 +28,7 @@ $options = get_option('wp-avorg-multisite-catalog');
 }
 
 .backdrop {
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.3);
   position: absolute;
   top: 0;
   width: 100%;
@@ -52,7 +52,7 @@ $options = get_option('wp-avorg-multisite-catalog');
 }
 
 .title {
-  font-size: 2.678em;
+  font-size: 2em;
   -webkit-box-orient: vertical;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -60,7 +60,7 @@ $options = get_option('wp-avorg-multisite-catalog');
 }
 
 .subtitle {
-  font-size: 2em;
+  font-size: 1.5em;
   text-transform: uppercase;
   margin: .5em 0 !important
 }
@@ -90,6 +90,28 @@ $options = get_option('wp-avorg-multisite-catalog');
 
   .cell {
     width: 50%
+  }
+}
+
+/* for phone only */
+@media screen and (max-width: 599px) {
+  .title {
+    font-size: 1.5em;
+  }
+
+  .subtitle {
+    font-size: 1em;
+  }
+}
+
+/* for desktop up */
+@media screen and (min-width: 1200px) {
+  .title {
+    font-size: 2.5em;
+  }
+
+  .subtitle {
+    font-size: 1.5em;
   }
 }
 
