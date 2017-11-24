@@ -233,7 +233,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$html = '<div class="grid" id="avgrid">';
 			
 		foreach( $recordings['data'] as $key=>$recording ) {
-			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '/800/500/' . $recording['site_image']['file'] : '';
+			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
 			$detailPage = $detailPageURL . $recording['id'] . '&image=' . $imageUrl;
 			$html .= '
 			<div class="cell">
