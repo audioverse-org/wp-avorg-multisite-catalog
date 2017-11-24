@@ -25,21 +25,21 @@
     <?php
       $options = get_option($this->plugin_name);
 
-      $baseURLFormerAPI = array_key_exists('baseURLFormerAPI', $options) ? $options['baseURLFormerAPI'] : '';
-      $user = array_key_exists('user', $options) ? $options['user'] : '';
-      $password = array_key_exists('password', $options) ? $options['password'] : '';
+      $baseURLFormerAPI = isset($options['baseURLFormerAPI']) ? $options['baseURLFormerAPI'] : '';
+      $user = isset($options['user']) ? $options['user'] : '';
+      $password = isset($options['password']) ? $options['password'] : '';
 
-      $baseURL = array_key_exists('baseURL', $options) ? $options['baseURL'] : '';
-      $token = array_key_exists('token', $options) ? $options['token'] : '';
+      $baseURL = isset($options['baseURL']) ? $options['baseURL'] : '';
+      $token = isset($options['token']) ? $options['token'] : '';
 
-      $detailPageURL = array_key_exists('detailPageURL', $options) ? $options['detailPageURL'] : '';
-      $site = array_key_exists('site', $options) ? $options['site'] : '';
-      $itemsPerPage = array_key_exists('itemsPerPage', $options) ? $options['itemsPerPage'] : '';
+      $detailPageURL = isset($options['detailPageURL']) ? $options['detailPageURL'] : '';
+      $site = isset($options['site']) ? $options['site'] : '';
+      $itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
 
-      $overlayBackgroundColor = array_key_exists('overlayBackgroundColor', $options) ? $options['overlayBackgroundColor'] : '';
-      $overlayHeight = array_key_exists('overlayHeight', $options) ? $options['overlayHeight'] : '';
-      $descriptionColor = array_key_exists('descriptionColor', $options) ? $options['descriptionColor'] : '';
-      $descriptionLines = array_key_exists('descriptionLines', $options) ? $options['descriptionLines'] : '';
+      $overlayBackgroundColor = isset($options['overlayBackgroundColor']) ? $options['overlayBackgroundColor'] : '';
+      $overlayHeight = isset($options['overlayHeight']) ? $options['overlayHeight'] : '';
+      $descriptionColor = isset($options['descriptionColor']) ? $options['descriptionColor'] : '';
+      $descriptionLines = isset($options['descriptionLines']) ? $options['descriptionLines'] : '';
     ?>
 
     <?php

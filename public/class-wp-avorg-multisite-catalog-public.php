@@ -123,10 +123,10 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 */
 	function get_recordings( $params ) {
 		$options = get_option($this->plugin_name);
-		$baseURL = array_key_exists('baseURL', $options) ? $options['baseURL'] : '';
-		$token = array_key_exists('token', $options) ? $options['token'] : '';
-		$site = array_key_exists('site', $options) ? $options['site'] : '';
-		$itemsPerPage = array_key_exists('itemsPerPage', $options) ? $options['itemsPerPage'] : '';
+		$baseURL = isset($options['baseURL']) ? $options['baseURL'] : '';
+		$token = isset($options['token']) ? $options['token'] : '';
+		$site = isset($options['site']) ? $options['site'] : '';
+		$itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
 
 		// add per page param
 		// Returns a string if the URL has parameters or NULL if not
@@ -147,7 +147,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 */
 	function rest_route_recordings_handler( $data ) {
 		$options = get_option($this->plugin_name);
-		$token = array_key_exists('token', $options) ? $options['token'] : '';
+		$token = isset($options['token']) ? $options['token'] : '';
 		$headers = array('Authorization' => 'Bearer ' . $token);
 		return $this->format_recordings($this->fetch_from_api($data['url'], $headers));
 	}
@@ -188,9 +188,9 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	function get_recording( $key ) {
 		if (!wp_cache_get($key)) {
 			$options = get_option($this->plugin_name);
-			$baseURLFormerAPI = array_key_exists('baseURLFormerAPI', $options) ? $options['baseURLFormerAPI'] : '';
-			$user = array_key_exists('user', $options) ? $options['user'] : '';
-			$password = array_key_exists('password', $options) ? $options['password'] : '';
+			$baseURLFormerAPI = isset($options['baseURLFormerAPI']) ? $options['baseURLFormerAPI'] : '';
+			$user = isset($options['user']) ? $options['user'] : '';
+			$password = isset($options['password']) ? $options['password'] : '';
 						
 			$headers = array( 'Authorization' => 'Basic ' . base64_encode( $user . ':' . $password ) );
 			$response = $this->fetch_from_api($baseURLFormerAPI . 'recordings/' . $key, $headers);
@@ -212,7 +212,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$atts = array_change_key_case((array)$atts, CASE_LOWER);
 		
 		$params = '';
-		if ( array_key_exists('tags', $atts) ) {
+		if ( isset($options['tags']) ) {
 			$tags = explode(",", $atts['tags']);
 			$params = '?tags[0]=' . implode('&tags[0]=', $tags);
 		}
@@ -220,7 +220,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$recordings = $this->get_recordings($params);
 
 		$options = get_option($this->plugin_name);
-		$detailPageURL = array_key_exists('detailPageURL', $options) ? $options['detailPageURL'] : '';
+		$detailPageURL = isset($options['detailPageURL']) ? $options['detailPageURL'] : '';
 		$query = parse_url($detailPageURL, PHP_URL_QUERY);
 		
 		// Returns a string if the URL has parameters or NULL if not
