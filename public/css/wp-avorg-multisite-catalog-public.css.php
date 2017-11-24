@@ -1,3 +1,11 @@
+<?php
+header("Content-type: text/css");
+
+require_once("../../../../../wp-config.php");
+
+$options = get_option('wp-avorg-multisite-catalog');
+?>
+
 /**
  * All of the CSS for your public-facing functionality should be
  * included in this file.
@@ -91,7 +99,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(255,255,255,0.3);
+  background-color: <?php echo !empty($options['overlayBackgroundColor']) ? $options['overlayBackgroundColor'] : 'rgba(255,255,255,0.3)' ?>;
   overflow: hidden;
   width: 100%;
   height: 0;
@@ -99,15 +107,20 @@
 }
 
 .cell:hover .overlay {
-  height: 100%;
+  height: <?php echo !empty($options['overlayHeight']) ? $options['overlayHeight'] : '100%' ?>;
+}
+
+.cell:hover .title,
+.cell:hover .subtitle {
+  visibility: hidden
 }
 
 .text {
   font-size: 1.5em;
-  color: #fff;
+  color: <?php echo !empty($options['descriptionColor']) ? $options['descriptionColor'] : '#fff' ?>;
   -webkit-box-orient: vertical;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: <?php echo !empty($options['descriptionLines']) ? $options['descriptionLines'] : '5' ?>;
   overflow: hidden;
   position: absolute;
   top: 50%;

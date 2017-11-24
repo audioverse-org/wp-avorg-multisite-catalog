@@ -35,6 +35,11 @@
       $detailPageURL = array_key_exists('detailPageURL', $options) ? $options['detailPageURL'] : '';
       $site = array_key_exists('site', $options) ? $options['site'] : '';
       $itemsPerPage = array_key_exists('itemsPerPage', $options) ? $options['itemsPerPage'] : '';
+
+      $overlayBackgroundColor = array_key_exists('overlayBackgroundColor', $options) ? $options['overlayBackgroundColor'] : '';
+      $overlayHeight = array_key_exists('overlayHeight', $options) ? $options['overlayHeight'] : '';
+      $descriptionColor = array_key_exists('descriptionColor', $options) ? $options['descriptionColor'] : '';
+      $descriptionLines = array_key_exists('descriptionLines', $options) ? $options['descriptionLines'] : '';
     ?>
 
     <?php
@@ -82,6 +87,27 @@
         <tr>
           <th scope="row"><label for="itemsPerPage">Items per page</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[itemsPerPage]" type="number" id="itemsPerPage" value="<?php echo $itemsPerPage;?>" class="regular-text">
+        </tr>
+      </tbody>
+    </table>
+    <h2 class="title">Grid settings</h2>
+    <table class="form-table">
+      <tbody>
+        <tr>
+          <th scope="row"><label for="overlayBackgroundColor">Overlay background color</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[overlayBackgroundColor]" type="text" id="overlayBackgroundColor" aria-describedby="tag-description" value="<?php echo $overlayBackgroundColor;?>" class="regular-text">
+        </tr>
+        <tr>
+          <th scope="row"><label for="overlayHeight">Overlay height</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[overlayHeight]" type="text" id="overlayHeight" aria-describedby="tag-description" value="<?php echo $overlayHeight;?>" class="regular-text">
+        </tr>
+        <tr>
+          <th scope="row"><label for="descriptionColor">Description color</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[descriptionColor]" type="text" id="descriptionColor" value="<?php echo $descriptionColor;?>" class="regular-text">
+        </tr>
+        <tr>
+          <th scope="row"><label for="descriptionLines">Description lines</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[descriptionLines]" type="number" id="descriptionLines" value="<?php echo $descriptionLines;?>" class="regular-text">
         </tr>
       </tbody>
     </table>

@@ -73,7 +73,9 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-avorg-multisite-catalog-admin.css', array(), $this->version, 'all' );
+		// CSS stylesheet for Color Picker
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-avorg-multisite-catalog-admin.css', array( 'wp-color-picker' ), $this->version, 'all' );
 
 	}
 
@@ -96,7 +98,8 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-avorg-multisite-catalog-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_media();
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-avorg-multisite-catalog-admin.js', array( 'jquery', 'wp-color-picker' ), $this->version, false );
 
 	}
 
@@ -174,6 +177,11 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 		$valid['detailPageURL'] = (isset($input['detailPageURL']) && !empty($input['detailPageURL'])) ? sanitize_text_field($input['detailPageURL']) : '';
 		$valid['site'] = (isset($input['site']) && !empty($input['site'])) ? sanitize_text_field($input['site']) : '';
 		$valid['itemsPerPage'] = (isset($input['itemsPerPage']) && !empty($input['itemsPerPage'])) ? sanitize_text_field($input['itemsPerPage']) : '';
+
+		$valid['overlayBackgroundColor'] = (isset($input['overlayBackgroundColor']) && !empty($input['overlayBackgroundColor'])) ? sanitize_text_field($input['overlayBackgroundColor']) : '';
+		$valid['overlayHeight'] = (isset($input['overlayHeight']) && !empty($input['overlayHeight'])) ? sanitize_text_field($input['overlayHeight']) : '';
+		$valid['descriptionColor'] = (isset($input['descriptionColor']) && !empty($input['descriptionColor'])) ? sanitize_text_field($input['descriptionColor']) : '';
+		$valid['descriptionLines'] = (isset($input['descriptionLines']) && !empty($input['descriptionLines'])) ? sanitize_text_field($input['descriptionLines']) : '';
 
 	    return $valid;
 	}
