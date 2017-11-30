@@ -269,7 +269,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			<div class="video-container">
 				<div class="video-wrapper">
 					<div class="embed-responsive embed-responsive-16by9">
-						<iframe class="embed-responsive-item" src="https://www.audioverse.org/english/embed/media/' . $recording['id'] . '?image=' . $_GET['image'] . '" scrolling="no" frameBorder="0" allowfullscreen></iframe>
+						<iframe class="embed-responsive-item" src="https://www.audioverse.org/english/embed/media/' . $recording['id'] . '?image=' . $_GET['image'] . '&title=false" scrolling="no" frameBorder="0" allowfullscreen></iframe>
 					</div>
 				</div>
 			</div>';
