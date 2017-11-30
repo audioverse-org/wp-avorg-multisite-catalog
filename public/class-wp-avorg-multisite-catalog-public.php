@@ -220,21 +220,13 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$recordings = $this->get_recordings($params);
 
 		$options = get_option($this->plugin_name);
-		$detailPageURL = isset($options['detailPageURL']) ? $options['detailPageURL'] : '';
-		$query = parse_url($detailPageURL, PHP_URL_QUERY);
-		
-		// Returns a string if the URL has parameters or NULL if not
-		if ( $query ) {
-			$detailPageURL .= '&recording_id=';
-		} else {
-			$detailPageURL .= '?recording_id=';
-		}
+		$detailPageID = isset($options['detailPageID']) ? $options['detailPageID'] : '';
 
 		$html = '<div class="grid" id="avgrid">';
 			
 		foreach( $recordings['data'] as $key=>$recording ) {
 			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
-			$detailPage = $detailPageURL . $recording['id'] . '&image=' . $imageUrl;
+			$detailPage = '?page_id=' . $detailPageID . '&recording_id=' . $recording['id'] . '&title=' . $recording['title'] . '&image=' . $imageUrl;
 			$html .= '
 			<div class="cell">
 				<a href="' . $detailPage . '">
@@ -258,7 +250,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$options = get_option($this->plugin_name);
 		$html .= '
 		<div class="show-more">
-			<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['meta']['pagination']['links']['next'] . '" data-detail-page-url="' . $detailPageURL . '">Show more</a>
+			<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['meta']['pagination']['links']['next'] . '" data-detail-page-id="' . $detailPageID . '">Show more</a>
 		</div>';
 		
 		return $html;
@@ -354,6 +346,33 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		}
 		
 		return $speaker;
+	}
+
+	/**
+	 * filter the document title
+	 * 
+	 * @param	array	$title	title data
+	 */
+	function filter_document_title_parts($title) {
+		$options = get_option($this->plugin_name);
+		if ( isset( $_GET['title'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
+			$title['title'] = $_GET['title'];
+		}
+		return $title;
+	}
+
+	/**
+	 * filter the page/post title
+	 * 
+	 * @param	string	$title	the title
+	 * @param	int		$id		post id
+	 */
+	function filter_the_title($title, $id = null) {
+		$options = get_option($this->plugin_name);
+		if ( isset( $_GET['title'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == $id ) {
+			return $_GET['title'];
+		}
+		return $title;
 	}
 
 }

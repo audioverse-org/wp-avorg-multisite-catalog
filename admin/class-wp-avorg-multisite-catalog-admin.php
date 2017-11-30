@@ -174,7 +174,7 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 		$valid['baseURL'] = (isset($input['baseURL']) && !empty($input['baseURL'])) ? sanitize_text_field($input['baseURL']) : '';
 		$valid['token'] = (isset($input['token']) && !empty($input['token'])) ? sanitize_text_field($input['token']) : '';
 
-		$valid['detailPageURL'] = (isset($input['detailPageURL']) && !empty($input['detailPageURL'])) ? sanitize_text_field($input['detailPageURL']) : '';
+		$valid['detailPageID'] = (isset($input['detailPageID']) && !empty($input['detailPageID'])) ? sanitize_text_field($input['detailPageID']) : '';
 		$valid['site'] = (isset($input['site']) && !empty($input['site'])) ? sanitize_text_field($input['site']) : '';
 		$valid['itemsPerPage'] = (isset($input['itemsPerPage']) && !empty($input['itemsPerPage'])) ? sanitize_text_field($input['itemsPerPage']) : '';
 

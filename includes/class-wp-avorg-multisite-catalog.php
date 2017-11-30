@@ -166,6 +166,22 @@ class Wp_Avorg_Multisite_Catalog {
 
 	}
 
+	function filter_document_title_parts($title) {
+		$options = get_option($this->plugin_name);
+		if ( isset( $_GET['title'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
+			$title['title'] = $_GET['title'];
+		}
+		return $title;
+	}
+
+	function filter_the_title($title, $id = null) {
+		$options = get_option($this->plugin_name);
+		if ( isset( $_GET['title'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == $id ) {
+			return $_GET['title'];
+		}
+		return $title;
+	}
+
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
@@ -187,6 +203,9 @@ class Wp_Avorg_Multisite_Catalog {
 		$this->loader->add_shortcode( 'recording_title', $plugin_public, 'get_recording_title' );
 		$this->loader->add_shortcode( 'recording_desc', $plugin_public, 'get_recording_desc' );
 		$this->loader->add_shortcode( 'recording_speaker', $plugin_public, 'get_recording_speaker' );
+
+		$this->loader->add_filter( 'document_title_parts', $plugin_public, 'filter_document_title_parts', 10, 2 );
+		$this->loader->add_filter( 'the_title', $plugin_public, 'filter_the_title', 10, 2 );
 
 	}
 

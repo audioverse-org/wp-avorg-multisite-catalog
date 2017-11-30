@@ -32,7 +32,7 @@
       $baseURL = isset($options['baseURL']) ? $options['baseURL'] : '';
       $token = isset($options['token']) ? $options['token'] : '';
 
-      $detailPageURL = isset($options['detailPageURL']) ? $options['detailPageURL'] : '';
+      $detailPageID = isset($options['detailPageID']) ? $options['detailPageID'] : '';
       $site = isset($options['site']) ? $options['site'] : '';
       $itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
 
@@ -76,8 +76,8 @@
     <table class="form-table">
       <tbody>
         <tr>
-          <th scope="row"><label for="detailPageURL">Detail page URL</label></th>
-          <td><input name="<?php echo $this->plugin_name;?>[detailPageURL]" type="text" id="detailPageURL" aria-describedby="tag-description" value="<?php echo $detailPageURL;?>" class="regular-text">
+          <th scope="row"><label for="detailPageID">Detail page ID</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[detailPageID]" type="text" id="detailPageID" aria-describedby="tag-description" value="<?php echo $detailPageID;?>" class="regular-text">
           <p class="description" id="tag-description"><?php esc_attr_e( 'This is the page that will be shown when the user click a recording', $this->plugin_name ); ?></p></td>
         </tr>
         <tr>
