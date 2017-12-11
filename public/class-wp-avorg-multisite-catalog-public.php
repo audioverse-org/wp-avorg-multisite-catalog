@@ -324,6 +324,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 					$speaker = $recording['presenters'][0]['givenName'] . ' ' . $recording['presenters'][0]['surname'];
 				}
 			}
+			return $speaker;
 		} else {
 			return 'No recording id';
 		}
