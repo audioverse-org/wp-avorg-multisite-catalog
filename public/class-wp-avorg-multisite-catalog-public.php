@@ -226,7 +226,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			
 		foreach( $recordings['data'] as $key=>$recording ) {
 			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
-			$detailPage = '?page_id=' . $detailPageID . '&recording_id=' . $recording['id'] . '&title=' . $recording['title'] . '&image=' . $imageUrl;
+			$detailPage = '?page_id=' . $detailPageID . '&recording_id=' . $recording['id'];
 			$html .= '
 			<div class="cell">
 				<a href="' . $detailPage . '">
@@ -264,12 +264,13 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	function get_recording_media( $atts ) {
 		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
 			$recording = $this->get_recording($_GET['recording_id']);
-			
+			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
+
 			return '
 			<div class="video-container">
 				<div class="video-wrapper">
 					<div class="embed-responsive embed-responsive-16by9">
-						<iframe class="embed-responsive-item" src="https://www.audioverse.org/english/embed/media/' . $recording['id'] . '?image=' . $_GET['image'] . '&title=false" scrolling="no" frameBorder="0" allowfullscreen></iframe>
+						<iframe class="embed-responsive-item" src="https://www.audioverse.org/english/embed/media/' . $recording['id'] . '?image=' . $imageUrl . '&title=false" scrolling="no" frameBorder="0" allowfullscreen></iframe>
 					</div>
 				</div>
 			</div>';
@@ -356,8 +357,9 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 */
 	function filter_document_title_parts($title) {
 		$options = get_option($this->plugin_name);
-		if ( isset( $_GET['title'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
-			$title['title'] = $_GET['title'];
+		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
+			$recording = $this->get_recording($_GET['recording_id']);
+			$title['title'] = $recording['title'];
 		}
 		return $title;
 	}
@@ -370,8 +372,9 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 */
 	function filter_the_title($title, $id = null) {
 		$options = get_option($this->plugin_name);
-		if ( isset( $_GET['title'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == $id ) {
-			return $_GET['title'];
+		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == $id ) {
+			$recording = $this->get_recording($_GET['recording_id']);
+			return $recording['title'];
 		}
 		return $title;
 	}

@@ -60,7 +60,7 @@ function showRecordings( data, detailPageID ) {
 	var imageUrl, imageName, detailPage;
 	data.data.forEach(function(element, index) {
 		imageUrl = element.site_image ? element.site_image.url  + '/800/500/' + element.site_image.file : '';
-		detailPage = '?page_id=' + detailPageID + '&recording_id=' + element.id + '&title=' + element.title + '&image=' + imageUrl;
+		detailPage = '?page_id=' + detailPageID + '&recording_id=' + element.id;
 		jQuery("#avgrid").append('<div class="cell"><a href="' + detailPage + '"><img src="' + imageUrl + '" class="responsive-image"><div class="backdrop"><div class="duration">' + element.duration_formatted + '</div><div class="inner-content"><div class="title">' + element.title + '</div><div class="subtitle">' + element.speaker_name + '</div></div></div><div class="overlay"><div class="text">' + element.description + '</div></div></a></div>');
 	});
 }
