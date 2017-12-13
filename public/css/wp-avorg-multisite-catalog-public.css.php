@@ -182,3 +182,16 @@ $options = get_option('wp-avorg-multisite-catalog');
   height: 100%;
   border: 0;
 }
+
+/* play button */
+.play-icon {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 0;
+  border-color: transparent transparent transparent #fff;
+  transition: 100ms all ease;
+  cursor: pointer;
+  border-style: solid;
+  border-width: 0.4em 0 0.4em 0.6em;
+  margin-right: 10px;
+}

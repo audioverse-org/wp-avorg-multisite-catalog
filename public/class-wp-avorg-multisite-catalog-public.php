@@ -232,7 +232,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 				<a href="' . $detailPage . '">
 					<img src="' . $imageUrl . '" class="responsive-image">
 					<div class="backdrop">
-						<div class="duration">' . $recording['duration_formatted'] . '</div>
+						<div class="duration"><span class="play-icon"></span>' . $recording['duration_formatted'] . '</div>
 						<div class="inner-content">
 							<div class="title">' . $recording['title'] . '</div>
 							<div class="subtitle">' . $recording['speaker_name'] . '</div>
