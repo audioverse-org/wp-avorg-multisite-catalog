@@ -188,6 +188,7 @@ class Wp_Avorg_Multisite_Catalog {
 		$this->loader->add_shortcode( 'recording_desc', $plugin_public, 'get_recording_desc' );
 		$this->loader->add_shortcode( 'recording_speaker', $plugin_public, 'get_recording_speaker' );
 
+		$this->loader->add_filter( 'wp_title', $plugin_public, 'filter_wp_title', 10, 2 );
 		$this->loader->add_filter( 'document_title_parts', $plugin_public, 'filter_document_title_parts', 10, 2 );
 		$this->loader->add_filter( 'the_title', $plugin_public, 'filter_the_title', 10, 2 );
 

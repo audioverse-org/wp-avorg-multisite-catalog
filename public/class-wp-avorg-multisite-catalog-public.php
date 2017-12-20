@@ -365,6 +365,20 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	}
 
 	/**
+	 * filter the document title
+	 * 
+	 * @param	array	$title	title data
+	 */
+	function filter_wp_title($title) {
+		$options = get_option($this->plugin_name);
+		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
+			$recording = $this->get_recording($_GET['recording_id']);
+			$title = $recording['title'];
+		}
+		return $title;
+	}
+
+	/**
 	 * filter the page/post title
 	 * 
 	 * @param	string	$title	the title
