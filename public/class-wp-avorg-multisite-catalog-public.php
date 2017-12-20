@@ -393,4 +393,36 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		return $title;
 	}
 
+	/**
+	 * Adding the Open Graph in the Language Attributes
+	 * 
+	 * @param	string	$output	the output
+	 */
+	function add_opengraph_doctype( $output ) {
+		return $output . ' xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml"';
+	}
+
+	/**
+	 * Add Open Graph Meta Info
+	 * 
+	 */
+	function insert_opengraph_in_head() {
+		// echo '<meta property="fb:admins" content="YOUR USER ID"/>';
+		echo '<meta property="og:title" content="' . get_the_title() . '"/>';
+		echo '<meta property="og:type" content="article"/>';
+		echo '<meta property="og:url" content="' . 'http//' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '"/>';
+		echo '<meta property="og:site_name" content="' . get_bloginfo( 'name' ) . '"/>';
+
+		$options = get_option($this->plugin_name);
+		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
+			$recording = $this->get_recording($_GET['recording_id']);
+			$image = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
+			echo '<meta property="og:image" content="' . esc_attr( $image ) . '"/>';
+		} else {
+			$custom_logo_id = get_theme_mod( 'custom_logo' );
+			$image = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+			echo '<meta property="og:image" content="' . $image[0] . '"/>';
+		}
+	}
+
 }

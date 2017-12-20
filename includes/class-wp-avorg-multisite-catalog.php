@@ -192,6 +192,10 @@ class Wp_Avorg_Multisite_Catalog {
 		$this->loader->add_filter( 'document_title_parts', $plugin_public, 'filter_document_title_parts', 10, 2 );
 		$this->loader->add_filter( 'the_title', $plugin_public, 'filter_the_title', 10, 2 );
 
+		// $this->loader->add_filter( 'wpseo_opengraph_image', $plugin_public, 'filter_wpseo_opengraph_image', 10, 1 );
+		$this->loader->add_filter( 'language_attributes', $plugin_public, 'add_opengraph_doctype', 10, 1 );
+		$this->loader->add_filter( 'wp_head', $plugin_public, 'insert_opengraph_in_head', 10, 1 );
+
 	}
 
 	/**
