@@ -196,6 +196,9 @@ class Wp_Avorg_Multisite_Catalog {
 		$this->loader->add_filter( 'language_attributes', $plugin_public, 'add_opengraph_doctype', 10, 1 );
 		$this->loader->add_filter( 'wp_head', $plugin_public, 'insert_opengraph_in_head', 10, 1 );
 
+		remove_action( 'wp_head', 'rel_canonical' );
+		$this->loader->add_action( 'wp_head', $plugin_public, 'rel_canonical_with_custom_tag_override' );
+
 	}
 
 	/**

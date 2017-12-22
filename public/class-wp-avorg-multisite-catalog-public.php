@@ -429,4 +429,12 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		}
 	}
 
+	/**
+	 * Override canonical url
+	 * 
+	 */
+	function rel_canonical_with_custom_tag_override() {
+		echo '<link rel="canonical" href="' . 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '"/>';
+	}
+
 }
