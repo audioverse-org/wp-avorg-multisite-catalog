@@ -416,9 +416,13 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$options = get_option($this->plugin_name);
 		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
 			$recording = $this->get_recording($_GET['recording_id']);
+			echo '<meta property="og:description" content="' . $recording['description'] . '"/>';
+
 			$image = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
 			echo '<meta property="og:image" content="' . esc_attr( $image ) . '"/>';
 		} else {
+			echo '<meta property="og:description" content="' . get_bloginfo( 'description' ) . '"/>';
+
 			$custom_logo_id = get_theme_mod( 'custom_logo' );
 			$image = wp_get_attachment_image_src( $custom_logo_id , 'full' );
 			echo '<meta property="og:image" content="' . $image[0] . '"/>';
