@@ -37,7 +37,7 @@
  * @param	object	e	event data
  */
 function getRecordings(e) {
-	var detailPageID = e.getAttribute('data-detail-page-id');
+	var detailPermalink = e.getAttribute('data-detail-permalink');
 	var next = e.getAttribute('data-next');
 	if ( next != 'undefined' ) {
 		fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags&url=' + encodeURIComponent(next)).then(function(response){
@@ -45,7 +45,7 @@ function getRecordings(e) {
 		}).then(function(response){
 			console.log(response);
 			document.getElementById('more').setAttribute('data-next', response.meta.pagination.links.next);
-			showRecordings(response, detailPageID);
+			showRecordings(response, detailPermalink);
 		});
 	}
 }
@@ -55,12 +55,12 @@ function getRecordings(e) {
  * 
  * @param	array	data	recordings
  */
-function showRecordings( data, detailPageID ) {
+function showRecordings( data, detailPermalink ) {
 	// console.log('data', data);
 	var imageUrl, imageName, detailPage;
 	data.data.forEach(function(element, index) {
 		imageUrl = element.site_image ? element.site_image.url  + '/800/500/' + element.site_image.file : '';
-		detailPage = '?page_id=' + detailPageID + '&' + element.sanitized_title + '&recording_id=' + element.id;
+		detailPage = detailPermalink + '?' + element.sanitized_title + '&recording_id=' + element.id;
 		jQuery("#avgrid").append('<div class="cell"><a href="' + detailPage + '"><img src="' + imageUrl + '" class="responsive-image"><div class="backdrop"><div class="duration"><span class="play-icon"></span>' + element.duration_formatted + '</div><div class="inner-content"><div class="title">' + element.title + '</div><div class="subtitle">' + element.speaker_name + '</div></div></div><div class="overlay"><div class="text">' + element.description + '</div></div></a></div>');
 	});
 }

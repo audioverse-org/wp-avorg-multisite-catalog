@@ -227,7 +227,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			
 		foreach( $recordings['data'] as $key=>$recording ) {
 			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
-			$detailPage = '?page_id=' . $detailPageID . '&' . $recording['sanitized_title'] . '&recording_id=' . $recording['id'];
+			$detailPage = get_permalink($detailPageID) . '?' . $recording['sanitized_title'] . '&recording_id=' . $recording['id'];
 			$html .= '
 			<div class="cell">
 				<a href="' . $detailPage . '">
@@ -251,7 +251,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$options = get_option($this->plugin_name);
 		$html .= '
 		<div class="show-more">
-			<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['meta']['pagination']['links']['next'] . '" data-detail-page-id="' . $detailPageID . '">Show more</a>
+			<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['meta']['pagination']['links']['next'] . '" data-detail-permalink="' . get_permalink($detailPageID) . '">Show more</a>
 		</div>';
 		
 		return $html;
