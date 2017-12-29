@@ -174,6 +174,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			$format = $duration_info['hours'] > 0 ? 'H:i:s' : 'i:s';
 			$recordings['data'][$key]['duration_formatted'] = gmdate($format, $recording['duration']);
 			$recordings['data'][$key]['speaker_name'] = $this->get_speaker_name( $recording );
+			$recordings['data'][$key]['sanitized_title'] = sanitize_title($recording['title']);
 		}
 
 		return $recordings;
@@ -226,7 +227,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			
 		foreach( $recordings['data'] as $key=>$recording ) {
 			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
-			$detailPage = '?page_id=' . $detailPageID . '&recording_id=' . $recording['id'];
+			$detailPage = '?page_id=' . $detailPageID . '&' . $recording['sanitized_title'] . '&recording_id=' . $recording['id'];
 			$html .= '
 			<div class="cell">
 				<a href="' . $detailPage . '">
