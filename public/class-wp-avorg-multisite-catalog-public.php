@@ -97,6 +97,9 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-avorg-multisite-catalog-public.js', array( 'jquery' ), $this->version, false );
+		$options = get_option($this->plugin_name);
+		$playerLibrary = isset($options['playerLibrary']) ? $options['playerLibrary'] : '';
+		wp_register_script( 'jw-player', $playerLibrary, array(), $this->version, 'all' );
 
 	}
 
@@ -263,15 +266,35 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_media( $atts ) {
-		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
+		if ( !empty( $_GET['recording_id'] ) ) {
+
+			$options = get_option($this->plugin_name);
+			$playerLicense = isset($options['playerLicense']) ? $options['playerLicense'] : '';
+			
+			wp_enqueue_script( 'jw-player' );
+			wp_add_inline_script( 'jw-player', 'jwplayer.key="' . $playerLicense . '";' );
+
 			$recording = $this->get_recording($_GET['recording_id']);
 			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
+			$audioUrl = sizeof($recording['mediaFiles']) ? $recording['mediaFiles'][sizeof($recording['mediaFiles']) - 1]['streamURL'] : '';
+
+			$jwPlayerScript = '
+			jwplayer("mediaplayer").setup({
+				primary: "html5",
+				file: "' . $audioUrl . '",
+				image: "' . $imageUrl . '",
+				width: "100%",
+				aspectratio: "16:9",
+				stretching: "fill"
+			});';
+			
+			wp_add_inline_script( 'jw-player', $jwPlayerScript );
 
 			return '
 			<div class="video-container">
 				<div class="video-wrapper">
 					<div class="embed-responsive embed-responsive-16by9">
-						<iframe class="embed-responsive-item" src="https://www.audioverse.org/english/embed/media/' . $recording['id'] . '?image=' . $imageUrl . '&title=false&onlyaudio" scrolling="no" frameBorder="0" allowfullscreen></iframe>
+						<div id="mediaplayer">Loading the player...</div>
 					</div>
 				</div>
 			</div>';
@@ -287,7 +310,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_title( $atts ) {
-		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
+		if ( !empty( $_GET['recording_id'] ) ) {
 			$recording = $this->get_recording($_GET['recording_id']);
 			return '<h1>' . $recording['title'] . '</h1>';
 		} else {
@@ -301,7 +324,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_desc( $atts ) {
-		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
+		if ( !empty( $_GET['recording_id'] ) ) {
 			$recording = $this->get_recording($_GET['recording_id']);
 			return $recording['description'];
 		} else {
@@ -315,7 +338,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_speaker( $atts ) {
-		if ( isset( $_GET['recording_id'] ) && $_GET['recording_id'] != null ) {
+		if ( !empty( $_GET['recording_id'] ) ) {
 			$recording = $this->get_recording($_GET['recording_id']);
 			$speaker = 'Anonymous Presenter';
 			

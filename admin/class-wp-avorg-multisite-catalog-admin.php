@@ -178,6 +178,9 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 		$valid['site'] = (isset($input['site']) && !empty($input['site'])) ? sanitize_text_field($input['site']) : '';
 		$valid['itemsPerPage'] = (isset($input['itemsPerPage']) && !empty($input['itemsPerPage'])) ? sanitize_text_field($input['itemsPerPage']) : '';
 
+		$valid['playerLibrary'] = (isset($input['playerLibrary']) && !empty($input['playerLibrary'])) ? sanitize_text_field($input['playerLibrary']) : '';
+		$valid['playerLicense'] = (isset($input['playerLicense']) && !empty($input['playerLicense'])) ? sanitize_text_field($input['playerLicense']) : '';
+
 		$valid['overlayBackgroundColor'] = (isset($input['overlayBackgroundColor']) && !empty($input['overlayBackgroundColor'])) ? sanitize_text_field($input['overlayBackgroundColor']) : '';
 		$valid['overlayHeight'] = (isset($input['overlayHeight']) && !empty($input['overlayHeight'])) ? sanitize_text_field($input['overlayHeight']) : '';
 		$valid['descriptionColor'] = (isset($input['descriptionColor']) && !empty($input['descriptionColor'])) ? sanitize_text_field($input['descriptionColor']) : '';

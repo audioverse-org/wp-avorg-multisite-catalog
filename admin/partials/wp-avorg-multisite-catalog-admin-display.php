@@ -36,6 +36,9 @@
       $site = isset($options['site']) ? $options['site'] : '';
       $itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
 
+      $playerLibrary = isset($options['playerLibrary']) ? $options['playerLibrary'] : '';
+      $playerLicense = isset($options['playerLicense']) ? $options['playerLicense'] : '';
+
       $overlayBackgroundColor = isset($options['overlayBackgroundColor']) ? $options['overlayBackgroundColor'] : '';
       $overlayHeight = isset($options['overlayHeight']) ? $options['overlayHeight'] : '';
       $descriptionColor = isset($options['descriptionColor']) ? $options['descriptionColor'] : '';
@@ -87,6 +90,19 @@
         <tr>
           <th scope="row"><label for="itemsPerPage">Items per page</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[itemsPerPage]" type="number" id="itemsPerPage" value="<?php echo $itemsPerPage;?>" class="regular-text">
+        </tr>
+      </tbody>
+    </table>
+    <h2 class="title">JWPlayer settings</h2>
+    <table class="form-table">
+      <tbody>
+        <tr>
+          <th scope="row"><label for="playerLibrary">Player library</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[playerLibrary]" type="text" id="playerLibrary" aria-describedby="tag-description" value="<?php echo $playerLibrary;?>" class="regular-text">
+        </tr>
+        <tr>
+          <th scope="row"><label for="playerLicense">Player licence</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[playerLicense]" type="text" id="playerLicense" aria-describedby="tag-description" value="<?php echo $playerLicense;?>" class="regular-text">
         </tr>
       </tbody>
     </table>
