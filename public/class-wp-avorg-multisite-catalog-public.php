@@ -95,11 +95,27 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		if(isset($_GET['recording_id'])){
+		$recordingData = $this->get_recording($_GET['recording_id']);
+		$recording = $recordingData['recording'];
+		$imageUrl = isset( $recording['coverImage'] ) ? $recording['coverImage']['url'] : $recording['imageWithFallback']['url'];
+		$audioUrl = sizeof($recording['audioFiles']) ? $recording['audioFiles'][sizeof($recording['audioFiles']) - 1]['url'] : '';
+		}
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-avorg-multisite-catalog-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-avorg-multisite-catalog-public.js', array( 'jquery', 'jw-player' ), $this->version, true );
 		$options = get_option($this->plugin_name);
 		$playerLibrary = isset($options['playerLibrary']) ? $options['playerLibrary'] : '';
+		$jwplayerLicense = isset($options['playerLicense']) ? $options['playerLicense'] : '';
+
+
 		wp_register_script( 'jw-player', $playerLibrary, array(), $this->version, 'all' );
+		wp_localize_script( $this->plugin_name, 'jwPlayerOop',
+        array( 
+            'image_url' => $imageUrl,
+            'audio_url' => $audioUrl,
+			'lisence' => $jwplayerLicense
+        )
+    );
 
 	}
 
@@ -109,13 +125,14 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	string	$url	The url to be fetched
 	 * @param	array	$headers	array with the headers
 	 */
-	function fetch_from_api( $url, $headers ) {
+	// STEP - 1.3
+	function fetch_from_api( $url, $headers, $data ) {
 
 		$args = array(
-		  'headers' => $headers
+		  'headers' => $headers,
+		  'body' => $data
 		);
-
-		$response = wp_remote_get( esc_url_raw( $url ), $args );
+		$response = wp_remote_post( esc_url_raw( $url ), $args );
 		return json_decode( wp_remote_retrieve_body( $response ), true );
 	}
 
@@ -124,23 +141,66 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * 
 	 * @param	array	$params	request params
 	 */
+	// STEP 1.2
 	function get_recordings( $params ) {
 		$options = get_option($this->plugin_name);
-		$baseURL = isset($options['baseURL']) ? $options['baseURL'] : '';
+		$itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
+		// for single tag
+		$tag = $params;
+		$tagName = empty($tag)  ? "null" : 'tagName:"'.$tag.'"';
+		$site = isset($options['site']) ? $options['site'] : '';
+		$websiteId = empty($site)  ? "" : 'websiteIds:'.$site.'';
+		$body = <<< GQL
+			query {
+				recordings(language:ENGLISH, first:$itemsPerPage, $tagName, $websiteId){
+				nodes {
+				id
+				title
+				coverImage {
+					name
+					url(size:800)
+				  }
+			      imageWithFallback {
+					url(size:800)
+					name
+				  }
+				description
+				persons{
+					givenName
+				  }
+				duration
+				audioFiles{
+					filename
+					url
+				}
+				videoFiles{
+					filename
+					url
+				}
+				}
+				pageInfo{
+					hasNextPage
+					hasPreviousPage
+					endCursor
+					startCursor
+				  }
+			}
+			}
+		GQL;
+		$baseURLGraphQl = isset($options['baseURLGraphQl']) ? $options['baseURLGraphQl'] : '';
 		$token = isset($options['token']) ? $options['token'] : '';
 		$site = isset($options['site']) ? $options['site'] : '';
-		$itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
 
 		// add per page param
 		// Returns a string if the URL has parameters or NULL if not
 		$query = parse_url($params, PHP_URL_QUERY);
-		$params .= ( $query ? '&' : '?' ) . 'per_page=' . $itemsPerPage;
-
-		$url = $baseURL . $site . $params;
-
+		// for multiple tags
+		// $params .= ( $query ? '&' : '?' ) . 'per_page=' . $itemsPerPage;
+		$data = array ('query' => $body);
+		echo "<script>console.log('get recording: " . json_encode($data) . "' );</script>";
+		$url = $baseURLGraphQl;
 		$headers = array('Authorization' => 'Bearer ' . $token);
-
-		return $this->format_recordings($this->fetch_from_api($url, $headers));
+		return $this->format_recordings($this->fetch_from_api($url, $headers, $data));
 	}
 
 	/**
@@ -149,10 +209,55 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$data	Contains all the request params
 	 */
 	function rest_route_recordings_handler( $data ) {
+		$next_page = ($data['url']);
+		$tagName = empty($data['tag'])  ? "null" : 'tagName:"'.$data['tag'].'"';
 		$options = get_option($this->plugin_name);
+		$itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
+		$site = isset($options['site']) ? $options['site'] : '';
+		$websiteId = empty($site)  ? "" : 'websiteIds:'.$site.'';
+		$body = <<< GQL
+			query {
+				recordings(language:ENGLISH, first:$itemsPerPage, after:"$next_page", $tagName, $websiteId){
+				nodes {
+				id
+				title
+				coverImage {
+					name
+					url(size:800)
+				  }
+			      imageWithFallback {
+					url(size:800)
+					name
+				  }
+				description
+				persons{
+					givenName
+				  }
+				duration
+				audioFiles{
+					filename
+					url
+				}
+				videoFiles{
+					filename
+					url
+				}
+				}
+				pageInfo{
+					hasNextPage
+					hasPreviousPage
+					endCursor
+					startCursor
+				  }
+			}
+			}
+			GQL;
+		$dataa = array ('query' => $body);
 		$token = isset($options['token']) ? $options['token'] : '';
 		$headers = array('Authorization' => 'Bearer ' . $token);
-		return $this->format_recordings($this->fetch_from_api($data['url'], $headers));
+		$baseURLGraphQl = isset($options['baseURLGraphQl']) ? $options['baseURLGraphQl'] : '';
+		$url = $baseURLGraphQl;
+		return $this->format_recordings($this->fetch_from_api($url, $headers, $dataa));
 	}
 
 	/**
@@ -163,7 +268,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		register_rest_route( $this->plugin_name . '/v1', '/tags', array(
 			'methods' => 'GET',
 			'callback' => array( $this, 'rest_route_recordings_handler'),
-		) );
+			) );
 	}
 
 	/**
@@ -171,16 +276,20 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * 
 	 * @param	object	$data	recordings list
 	 */
-	function format_recordings( $recordings ) {
-		foreach( $recordings['data'] as $key=>$recording ) {
-			$duration_info = getdate($recording['duration']);
-			$format = $duration_info['hours'] > 0 ? 'H:i:s' : 'i:s';
-			$recordings['data'][$key]['duration_formatted'] = gmdate($format, $recording['duration']);
-			$recordings['data'][$key]['speaker_name'] = $this->get_speaker_name( $recording );
-			$recordings['data'][$key]['sanitized_title'] = sanitize_title($recording['title']);
-		}
 
-		return $recordings;
+	//  STEP 1.4
+	function format_recordings( $recordings ) {
+		if (is_array($recordings['data']) || is_object($recordings['data'])) {
+			
+			foreach( $recordings['data']['recordings']['nodes']  as $key=>$recording ) {
+				$duration_info = getdate($recording['duration']);
+				$format = $duration_info['hours'] > 0 ? 'H:i:s' : 'i:s';
+				$recordings['data']['recordings']['nodes'][$key]['duration_formatted'] = gmdate($format, $recording['duration']);
+				$recordings['data']['recordings']['nodes'][$key]['speaker_name'] = $this->get_speaker_name( $recording );
+				$recordings['data']['recordings']['nodes'][$key]['sanitized_title'] = sanitize_title($recording['title']);
+			}			
+			return $recordings;
+		}
 	}
 
 	/**
@@ -192,14 +301,43 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	function get_recording( $key ) {
 		if (!wp_cache_get($key)) {
 			$options = get_option($this->plugin_name);
-			$baseURLFormerAPI = isset($options['baseURLFormerAPI']) ? $options['baseURLFormerAPI'] : '';
+			$baseURLFormerAPI = isset($options['baseURLGraphQl']) ? $options['baseURLGraphQl'] : '';
 			$user = isset($options['user']) ? $options['user'] : '';
 			$password = isset($options['password']) ? $options['password'] : '';
-						
 			$headers = array( 'Authorization' => 'Basic ' . base64_encode( $user . ':' . $password ) );
-			$response = $this->fetch_from_api($baseURLFormerAPI . 'recordings/' . $key, $headers);
-			wp_cache_add($key, $response['result'][0]['recordings']);
-			return $response['result'][0]['recordings'];
+			$body =sprintf("
+			query {
+				recording(id:%s){
+				title,
+				description,
+				coverImage {
+					name
+					url(size:800)
+				  },
+			      imageWithFallback {
+					url(size:800)
+					name
+				  },
+				  audioFiles{
+					url
+				  }
+				  persons{
+					givenName
+					surname
+				  }
+			}
+		}
+		", $key);
+
+			$data = array ('query' => $body);
+			$response = $this->fetch_from_api($baseURLFormerAPI, $headers, $data);
+			echo "<script>console.log('get recording: " . json_encode($response) . "' );</script>";
+			//////////////////////////////////////////////////////////////////////////////////
+			// wp_cache_add($key, $response['result'][0]['recordings']);
+			// return $response['result'][0]['recordings'];
+			/////////////////////////////////////////////////////////////////////////////////
+			wp_cache_add($key, $response['data']);
+			return $response['data'];
 		} else {
 			return wp_cache_get($key);
 		}
@@ -210,55 +348,67 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * 
 	 * @param	array	$atts	shortcode attributes
 	 */
+
+	//  STEP 1 
 	function get_list( $atts, $content = null, $tag = '' ) {
 
 		// normalize attribute keys, lowercase
 		$atts = array_change_key_case((array)$atts, CASE_LOWER);
-		
+
 		$params = '';
-		if ( isset($options['tags']) ) {
+		if ( isset($atts['tags']) ) {
 			$tags = explode(",", $atts['tags']);
-			$params = '?tags[0]=' . implode('&tags[0]=', $tags);
+			// for multiple tags
+			// $params = '?tags[0]=' . implode('&tags[0]=', $tags);
+			// for single tag
+			$params = $tags[0];
 		}
 
+		echo "<script>console.log('get list: " . json_encode($atts) . "' );</script>";
+		
+		// STEP 1.1
 		$recordings = $this->get_recordings($params);
-
+		
 		$options = get_option($this->plugin_name);
 		$detailPageID = isset($options['detailPageID']) ? $options['detailPageID'] : '';
 
 		$html = '<div class="grid" id="avgrid">';
-			
-		foreach( $recordings['data'] as $key=>$recording ) {
-			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
-			$detailPage = get_permalink($detailPageID) . '?' . $recording['sanitized_title'] . '&recording_id=' . $recording['id'];
-			$html .= '
-			<div class="cell">
-				<a href="' . $detailPage . '">
-					<img src="' . $imageUrl . '" class="responsive-image">
-					<div class="backdrop">
-						<div class="duration"><span class="play-icon"></span>' . $recording['duration_formatted'] . '</div>
-						<div class="inner-content">
-							<div class="title">' . $recording['title'] . '</div>
-							<div class="subtitle">' . $recording['speaker_name'] . '</div>
+		if (is_array($recordings['data']) || is_object($recordings['data'])) {
+		foreach( $recordings['data']['recordings']['nodes'] as $key=>$recording ) {
+				// // // // // // // // // // // // // // // // // // // // // // ///////////////////////////////////////////////////////////////////
+				$imageUrl = isset( $recording['coverImage'] ) ? $recording['coverImage']['url'] : $recording['imageWithFallback']['url'];
+				$detailPage = get_permalink($detailPageID) . '?' . $recording['sanitized_title'] . '&recording_id=' . $recording['id'];
+				// echo "<script>console.log('get list: " . get_permalink($detailPageID) . "' );</script>";
+				$description = empty( $recording['description'] ) ? 'No Description' : $recording['description'];
+				$html .= '
+				<div class="cell">
+					<a href="' . $detailPage . '">
+						<img src="' . $imageUrl . '" class="responsive-image">
+						<div class="backdrop">
+							<div class="duration"><span class="play-icon"></span>' . $recording['duration_formatted'] . '</div>
+							<div class="inner-content">
+								<div class="title">' . $recording['title'] . '</div>
+								<div class="subtitle">' . $recording['speaker_name'] . '</div>
+							</div>
 						</div>
-					</div>
-					<div class="overlay">
-						<div class="text">' . $recording['description'] . '</div>
-					</div>
-				</a>
-			</div>';
-		}
-			
+						<div class="overlay">
+							<div class="text">' . $description . '</div>
+						</div>
+					</a>
+				</div>';
+			}
+		}	
 		$html .= '</div>';
 		
 		$options = get_option($this->plugin_name);
 		$html .= '
 		<div class="show-more">
-			<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['meta']['pagination']['links']['next'] . '" data-detail-permalink="' . get_permalink($detailPageID) . '">Show more</a>
+		<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['data']['recordings']['pageInfo']['endCursor'] . '" data-detail-permalink="' . get_permalink($detailPageID) . '" data-tags="' . $params .'">Show more</a>
 		</div>';
 		
 		return $html;
 	}
+
 
 	/**
 	 * Shortcode function that returns the recording's media player
@@ -266,30 +416,13 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$atts	shortcode attributes
 	 */
 	function get_recording_media( $atts ) {
+
 		if ( !empty( $_GET['recording_id'] ) ) {
 
 			$options = get_option($this->plugin_name);
-			$playerLicense = isset($options['playerLicense']) ? $options['playerLicense'] : '';
-			
 			wp_enqueue_script( 'jw-player' );
-			wp_add_inline_script( 'jw-player', 'jwplayer.key="' . $playerLicense . '";' );
-
-			$recording = $this->get_recording($_GET['recording_id']);
-			$imageUrl = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
-			$audioUrl = sizeof($recording['mediaFiles']) ? $recording['mediaFiles'][sizeof($recording['mediaFiles']) - 1]['streamURL'] : '';
-
-			$jwPlayerScript = '
-			jwplayer("mediaplayer").setup({
-				primary: "html5",
-				file: "' . $audioUrl . '",
-				image: "' . $imageUrl . '",
-				width: "100%",
-				aspectratio: "16:9",
-				stretching: "fill"
-			});';
-			
-			wp_add_inline_script( 'jw-player', $jwPlayerScript );
-
+			$recordingData = $this->get_recording($_GET['recording_id']);
+			$recording = $recordingData['recording'];
 			return '
 			<div class="video-container">
 				<div class="video-wrapper">
@@ -312,7 +445,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	function get_recording_title( $atts ) {
 		if ( !empty( $_GET['recording_id'] ) ) {
 			$recording = $this->get_recording($_GET['recording_id']);
-			return '<h1>' . $recording['title'] . '</h1>';
+			return '<h1>' . $recording['recording']['title'] . '</h1>';
 		} else {
 			return 'No recording id';
 		}
@@ -326,7 +459,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	function get_recording_desc( $atts ) {
 		if ( !empty( $_GET['recording_id'] ) ) {
 			$recording = $this->get_recording($_GET['recording_id']);
-			return $recording['description'];
+			return $recording['recording']['description'];
 		} else {
 			return 'No recording id';
 		}
@@ -339,16 +472,17 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 */
 	function get_recording_speaker( $atts ) {
 		if ( !empty( $_GET['recording_id'] ) ) {
-			$recording = $this->get_recording($_GET['recording_id']);
+			$recordingData = $this->get_recording($_GET['recording_id']);
+			$recording = $recordingData['recording'];
 			$speaker = 'Anonymous Presenter';
-			
-			if ( isset( $recording['presenters'] ) ) {
-				if ( sizeof( $recording['presenters'] ) > 1 ) {
+			if ( isset( $recording['persons'] ) ) {
+				if ( sizeof( $recording['persons'] ) > 1 ) {
 					$speaker = 'Various Presenters';
-				} else if ( sizeof( $recording['presenters'] ) > 0 ) {
-					$speaker = $recording['presenters'][0]['givenName'] . ' ' . $recording['presenters'][0]['surname'];
+				} else if ( sizeof( $recording['persons'] ) > 0 ) {
+					$speaker = $recording['persons'][0]['givenName'] . ' ' . $recording['persons'][0]['surname'];
 				}
 			}
+
 			return $speaker;
 		} else {
 			return 'No recording id';
@@ -363,11 +497,11 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	function get_speaker_name( $recording ) {
 		$speaker = 'Anonymous Presenter';
 		
-		if ( isset( $recording['presenters'] ) ) {
-			if ( sizeof( $recording['presenters']['data'] ) > 1 ) {
+		if ( isset( $recording['persons'] ) ) {
+			if ( sizeof( $recording['persons'] ) > 1 ) {
 				$speaker = 'Various Presenters';
-			} else if ( sizeof( $recording['presenters']['data'] ) > 0 ) {
-				$speaker = $recording['presenters']['data'][0]['name'];
+			} else if ( sizeof( $recording['persons'] ) > 0 ) {
+				$speaker = $recording['persons'][0]['givenName'];
 			}
 		}
 		
@@ -383,7 +517,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$options = get_option($this->plugin_name);
 		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
 			$recording = $this->get_recording($_GET['recording_id']);
-			$title['title'] = $recording['title'];
+			$title['title'] = $recording['recording']['title'];
 		}
 		return $title;
 	}
@@ -397,7 +531,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$options = get_option($this->plugin_name);
 		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == get_the_ID() ) {
 			$recording = $this->get_recording($_GET['recording_id']);
-			$title = $recording['title'];
+			$title = $recording['recording']['title'];
 		}
 		return $title;
 	}
@@ -412,7 +546,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$options = get_option($this->plugin_name);
 		if ( isset( $_GET['recording_id'] ) && isset( $options['detailPageID'] ) && $options['detailPageID'] == $id ) {
 			$recording = $this->get_recording($_GET['recording_id']);
-			return $recording['title'];
+			return $recording['recording']['title'];
 		}
 		return $title;
 	}
@@ -442,7 +576,7 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			$recording = $this->get_recording($_GET['recording_id']);
 			echo '<meta property="og:description" content="' . $recording['description'] . '"/>';
 
-			$image = isset( $recording['site_image'] ) ? $recording['site_image']['url'] . '800/500/' . $recording['site_image']['file'] : '';
+			$image = isset( $recording['coverImage'] ) ? $recording['coverImage']['url'] : $recording['imageWithFallback']['url'];
 			echo '<meta property="og:image" content="' . esc_attr( $image ) . '"/>';
 		} else {
 			echo '<meta property="og:description" content="' . get_bloginfo( 'description' ) . '"/>';

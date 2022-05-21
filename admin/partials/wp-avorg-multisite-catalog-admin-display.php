@@ -19,6 +19,7 @@
   <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
   <!-- <h2 class="nav-tab-wrapper">Tab</h2> -->
+  
 
   <form method="post" name="cleanup_options" action="options.php">
 
@@ -31,6 +32,8 @@
 
       $baseURL = isset($options['baseURL']) ? $options['baseURL'] : '';
       $token = isset($options['token']) ? $options['token'] : '';
+
+      $baseURLGraphQl = isset($options['baseURLGraphQl']) ? $options['baseURLGraphQl'] : '';
 
       $detailPageID = isset($options['detailPageID']) ? $options['detailPageID'] : '';
       $site = isset($options['site']) ? $options['site'] : '';
@@ -53,10 +56,10 @@
     <h2 class="title">API credentials</h2>
     <table class="form-table">
       <tbody>
-        <tr>
+        <!-- <tr>
           <th scope="row"><label for="baseURLFormerAPI">Base URL former API</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[baseURLFormerAPI]" type="text" id="baseURLFormerAPI" aria-describedby="tag-description" value="<?php echo $baseURLFormerAPI;?>" class="regular-text">
-        </tr>
+        </tr> -->
         <tr>
           <th scope="row"><label for="user">User</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[user]" type="text" id="user" value="<?php echo $user;?>" class="regular-text">
@@ -65,13 +68,17 @@
           <th scope="row"><label for="password">Password</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[password]" type="password" id="password" value="<?php echo $password;?>" class="regular-text">
         </tr>
-        <tr>
+        <!-- <tr>
           <th scope="row"><label for="baseURL">Base URL new API</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[baseURL]" type="text" id="baseURL" aria-describedby="tag-description" value="<?php echo $baseURL;?>" class="regular-text">
-        </tr>
+        </tr> -->
         <tr>
           <th scope="row"><label for="token">Bearer token</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[token]" type="text" id="token" value="<?php echo $token;?>" class="regular-text">
+        </tr>
+        <tr>
+          <th scope="row"><label for="baseURLGraphQl">Base URL GraphQl</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[baseURLGraphQl]" type="text" id="baseURLGraphQl" aria-describedby="tag-description" value="<?php echo $baseURLGraphQl;?>" class="regular-text">
         </tr>
       </tbody>
     </table>
@@ -84,8 +91,8 @@
           <p class="description" id="tag-description"><?php esc_attr_e( 'This is the page that will be shown when the user click a recording', $this->plugin_name ); ?></p></td>
         </tr>
         <tr>
-          <th scope="row"><label for="site">Site</label></th>
-          <td><input name="<?php echo $this->plugin_name;?>[site]" type="text" id="site" aria-describedby="tag-description" value="<?php echo $site;?>" class="regular-text">
+          <th scope="row"><label for="site">Site ID</label></th>
+          <td><input name="<?php echo $this->plugin_name;?>[site]" type="number" id="site" aria-describedby="tag-description" value="<?php echo $site;?>" class="regular-text">
         </tr>
         <tr>
           <th scope="row"><label for="itemsPerPage">Items per page</label></th>
