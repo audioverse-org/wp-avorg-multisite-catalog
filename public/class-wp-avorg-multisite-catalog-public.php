@@ -197,7 +197,6 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		// for multiple tags
 		// $params .= ( $query ? '&' : '?' ) . 'per_page=' . $itemsPerPage;
 		$data = array ('query' => $body);
-		echo "<script>console.log('get recording: " . json_encode($data) . "' );</script>";
 		$url = $baseURLGraphQl;
 		$headers = array('Authorization' => 'Bearer ' . $token);
 		return $this->format_recordings($this->fetch_from_api($url, $headers, $data));
@@ -331,7 +330,6 @@ class Wp_Avorg_Multisite_Catalog_Public {
 
 			$data = array ('query' => $body);
 			$response = $this->fetch_from_api($baseURLFormerAPI, $headers, $data);
-			echo "<script>console.log('get recording: " . json_encode($response) . "' );</script>";
 			//////////////////////////////////////////////////////////////////////////////////
 			// wp_cache_add($key, $response['result'][0]['recordings']);
 			// return $response['result'][0]['recordings'];
@@ -363,8 +361,6 @@ class Wp_Avorg_Multisite_Catalog_Public {
 			// for single tag
 			$params = $tags[0];
 		}
-
-		echo "<script>console.log('get list: " . json_encode($atts) . "' );</script>";
 		
 		// STEP 1.1
 		$recordings = $this->get_recordings($params);
@@ -378,7 +374,6 @@ class Wp_Avorg_Multisite_Catalog_Public {
 				// // // // // // // // // // // // // // // // // // // // // // ///////////////////////////////////////////////////////////////////
 				$imageUrl = isset( $recording['coverImage'] ) ? $recording['coverImage']['url'] : $recording['imageWithFallback']['url'];
 				$detailPage = get_permalink($detailPageID) . '?' . $recording['sanitized_title'] . '&recording_id=' . $recording['id'];
-				// echo "<script>console.log('get list: " . get_permalink($detailPageID) . "' );</script>";
 				$description = empty( $recording['description'] ) ? 'No Description' : $recording['description'];
 				$html .= '
 				<div class="cell">
