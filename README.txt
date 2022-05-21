@@ -14,6 +14,11 @@ Access to the AudioVerse Catalog by tags, using WP shortcodes.
 
 This plugin allows to connect to the AudioVerse.org API to pull recordings filtered by tags and provides a set of shortcodes to display and format the data.
 
+Site ID : 
+
+AudioVerse : 1
+Journeys Unscripted : 2 
+
 Shortcodes:
 
 [recording_media]
