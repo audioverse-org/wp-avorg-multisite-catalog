@@ -49,6 +49,11 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 (or jpg, jpeg, gif).
 2. This is the second screen shot
 
+== Tests ==
+
+composer install
+./vendor/bin/phpunit ./tests/
+
 == Changelog ==
 
 = 1.0 =
