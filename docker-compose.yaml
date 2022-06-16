@@ -13,6 +13,8 @@ services:
       - WORDPRESS_DEBUG=1
   db:
     image: mysql:5.7
+    ports:
+      - "3306:3306"
     restart: always
     volumes:
       - ./db:/var/lib/mysql
@@ -20,5 +22,10 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: dbpass
-      MYSQL_RANDOM_ROOT_PASSWORD: "1"
+      MYSQL_ROOT_PASSWORD: dbroot
+#  test:
+#    build:
+#      context: .
+#    depends_on:
+#      - db
 
