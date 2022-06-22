@@ -26,12 +26,12 @@
     <?php
       $options = get_option($this->plugin_name);
 
-      $baseURLFormerAPI = isset($options['baseURLFormerAPI']) ? $options['baseURLFormerAPI'] : '';
-      $user = isset($options['user']) ? $options['user'] : '';
-      $password = isset($options['password']) ? $options['password'] : '';
+      // $baseURLFormerAPI = isset($options['baseURLFormerAPI']) ? $options['baseURLFormerAPI'] : '';
+      // $user = isset($options['user']) ? $options['user'] : '';
+      // $password = isset($options['password']) ? $options['password'] : '';
 
-      $baseURL = isset($options['baseURL']) ? $options['baseURL'] : '';
-      $token = isset($options['token']) ? $options['token'] : '';
+      // $baseURL = isset($options['baseURL']) ? $options['baseURL'] : '';
+      // $token = isset($options['token']) ? $options['token'] : '';
 
       $baseURLGraphQl = isset($options['baseURLGraphQl']) ? $options['baseURLGraphQl'] : '';
 
@@ -60,22 +60,22 @@
           <th scope="row"><label for="baseURLFormerAPI">Base URL former API</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[baseURLFormerAPI]" type="text" id="baseURLFormerAPI" aria-describedby="tag-description" value="<?php echo $baseURLFormerAPI;?>" class="regular-text">
         </tr> -->
-        <tr>
+        <!-- <tr>
           <th scope="row"><label for="user">User</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[user]" type="text" id="user" value="<?php echo $user;?>" class="regular-text">
         </tr>
         <tr>
           <th scope="row"><label for="password">Password</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[password]" type="password" id="password" value="<?php echo $password;?>" class="regular-text">
-        </tr>
+        </tr> -->
         <!-- <tr>
           <th scope="row"><label for="baseURL">Base URL new API</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[baseURL]" type="text" id="baseURL" aria-describedby="tag-description" value="<?php echo $baseURL;?>" class="regular-text">
         </tr> -->
-        <tr>
+        <!-- <tr>
           <th scope="row"><label for="token">Bearer token</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[token]" type="text" id="token" value="<?php echo $token;?>" class="regular-text">
-        </tr>
+        </tr> -->
         <tr>
           <th scope="row"><label for="baseURLGraphQl">Base URL GraphQl</label></th>
           <td><input name="<?php echo $this->plugin_name;?>[baseURLGraphQl]" type="text" id="baseURLGraphQl" aria-describedby="tag-description" value="<?php echo $baseURLGraphQl;?>" class="regular-text">
