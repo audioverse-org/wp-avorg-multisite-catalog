@@ -142,17 +142,17 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 * @param	array	$params	request params
 	 */
 	// STEP 1.2
-	function get_recordings( $params ) {
+	function get_recordings() {
 		$options = get_option($this->plugin_name);
 		$itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
 		// for single tag
-		$tag = $params;
-		$tagName = empty($tag)  ? "null" : 'tagName:"'.$tag.'"';
+		// $tag = $params;
+		// $tagName = empty($tag)  ? "null" : 'tagName:"'.$tag.'"';
 		$site = isset($options['site']) ? $options['site'] : '';
 		$websiteId = empty($site)  ? "" : 'websiteIds:'.$site.'';
 		$body = <<< GQL
 			query {
-				recordings(language:ENGLISH, first:$itemsPerPage, $tagName, $websiteId){
+				recordings(language:ENGLISH, first:$itemsPerPage, $websiteId){
 				nodes {
 				id
 				title
@@ -209,14 +209,14 @@ class Wp_Avorg_Multisite_Catalog_Public {
 	 */
 	function rest_route_recordings_handler( $data ) {
 		$next_page = ($data['url']);
-		$tagName = empty($data['tag'])  ? "null" : 'tagName:"'.$data['tag'].'"';
+		// $tagName = empty($data['tag'])  ? "null" : 'tagName:"'.$data['tag'].'"';
 		$options = get_option($this->plugin_name);
 		$itemsPerPage = isset($options['itemsPerPage']) ? $options['itemsPerPage'] : '';
 		$site = isset($options['site']) ? $options['site'] : '';
 		$websiteId = empty($site)  ? "" : 'websiteIds:'.$site.'';
 		$body = <<< GQL
 			query {
-				recordings(language:ENGLISH, first:$itemsPerPage, after:"$next_page", $tagName, $websiteId){
+				recordings(language:ENGLISH, first:$itemsPerPage, after:"$next_page", $websiteId){
 				nodes {
 				id
 				title
@@ -353,14 +353,15 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		// normalize attribute keys, lowercase
 		$atts = array_change_key_case((array)$atts, CASE_LOWER);
 
-		$params = '';
-		if ( isset($atts['tags']) ) {
-			$tags = explode(",", $atts['tags']);
-			// for multiple tags
-			// $params = '?tags[0]=' . implode('&tags[0]=', $tags);
-			// for single tag
-			$params = $tags[0];
-		}
+		// $params = '';
+		// if ( isset($atts['tags']) ) {
+		// 	$tags = explode(",", $atts['tags']);
+		// 	// for multiple tags
+		// 	// $params = '?tags[0]=' . implode('&tags[0]=', $tags);
+		// 	// for single tag
+		// 	$params = $tags[0];
+		// }
+
 		
 		// STEP 1.1
 		$recordings = $this->get_recordings($params);
@@ -396,9 +397,10 @@ class Wp_Avorg_Multisite_Catalog_Public {
 		$html .= '</div>';
 		
 		$options = get_option($this->plugin_name);
+		// <a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['data']['recordings']['pageInfo']['endCursor'] . '" data-detail-permalink="' . get_permalink($detailPageID) . '" data-tags="' . $params .'">Show more</a>
 		$html .= '
 		<div class="show-more">
-		<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['data']['recordings']['pageInfo']['endCursor'] . '" data-detail-permalink="' . get_permalink($detailPageID) . '" data-tags="' . $params .'">Show more</a>
+		<a href="javascript:void(0)" id="more" onclick="getRecordings(this)" data-next="' . $recordings['data']['recordings']['pageInfo']['endCursor'] . '" data-detail-permalink="' . get_permalink($detailPageID) . '">Show more</a>
 		</div>';
 		
 		return $html;

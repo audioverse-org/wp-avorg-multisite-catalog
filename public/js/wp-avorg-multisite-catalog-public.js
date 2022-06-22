@@ -52,9 +52,10 @@
 function getRecordings(e) {
 	var detailPermalink = e.getAttribute('data-detail-permalink');
 	var next = e.getAttribute('data-next');
-	var tags = e.getAttribute('data-tags');
+	// var tags = e.getAttribute('data-tags');
 	if ( next != 'undefined' ) {
-		fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags&url=' + encodeURIComponent(next) + '&tag=' + encodeURIComponent(tags)).then(function(response){
+		// fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags&url=' + encodeURIComponent(next) + '&tag=' + encodeURIComponent(tags)).then(function(response){
+		fetch('?rest_route=/wp-avorg-multisite-catalog/v1/tags&url=' + encodeURIComponent(next)).then(function(response){
 			console.log(response)
 			return response.json();
 		}).then(function(response){

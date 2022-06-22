@@ -31,8 +31,6 @@ Shows the description of the recording
 Shows the name of the speaker
 [list]
 Shows the list of recordings for the current site.
-[list tags=”editors”] can accept parameters, known as attributes:
-tags=”editors” the value of tags could be one value or a comma separated list of values.
 
 
 == Installation ==
