@@ -1,10 +1,12 @@
 services:
   wp:
     image: wordpress:latest
+    container_name: av_wp_web
     ports:
       - "8888:80"
     volumes:
       - ./:/var/www/html/wp-content/plugins/wp-avorg-multisite-catalog
+      - wordpress:/var/www/html
     environment:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=dbuser
@@ -12,7 +14,10 @@ services:
       - WORDPRESS_DB_NAME=wordpress
   db:
     image: mysql:5.7
+    container_name: av_wp_db
     restart: always
+    ports: 
+      - "3306:3306"
     volumes:
       - ./db:/var/lib/mysql
     environment:
@@ -20,4 +25,6 @@ services:
       MYSQL_USER: dbuser
       MYSQL_PASSWORD: dbpass
       MYSQL_RANDOM_ROOT_PASSWORD: "1"
-
+volumes:
+  wordpress:
+  db:

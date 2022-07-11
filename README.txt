@@ -47,6 +47,19 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 (or jpg, jpeg, gif).
 2. This is the second screen shot
 
+== Development ==
+
+```
+docker-compose up
+chmod +x local-setup.sh
+./local-setup.sh
+open http://localhost:8888/
+open http://localhost:8888/wp-admin/
+```
+
+User: admin
+Password: password
+
 == Changelog ==
 
 = 1.0 =
