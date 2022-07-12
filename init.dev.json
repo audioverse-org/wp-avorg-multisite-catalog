@@ -1,1 +1,12 @@
-{"baseURLGraphQl":"https:\/\/graphql-staging.audioverse.org\/","detailPageID":"","site":"2","itemsPerPage":"","playerLibrary":"https:\/\/content.jwplatform.com\/libraries\/hPrk18k3.js","playerLicense":"","overlayBackgroundColor":"rgba(0, 0, 0, 0.5)","overlayHeight":"","descriptionColor":"","descriptionLines":"6"}
+{
+  "baseURLGraphQl": "https:\/\/graphql-staging.audioverse.org\/",
+  "detailPageID": "DETAIL_PAGE_ID",
+  "site": "2",
+  "itemsPerPage": "",
+  "playerLibrary": "https:\/\/content.jwplatform.com\/libraries\/hPrk18k3.js",
+  "playerLicense": "",
+  "overlayBackgroundColor": "rgba(0, 0, 0, 0.5)",
+  "overlayHeight": "",
+  "descriptionColor": "",
+  "descriptionLines": "6"
+}

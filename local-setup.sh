@@ -8,8 +8,25 @@ docker run -td \
     -e WORDPRESS_DB_NAME=wordpress \
     wordpress:cli
 
-run () { docker exec -i tmp-cli "$@"; }
+run () { docker exec -t tmp-cli "$@"; }
 wp () { run wp "$@"; }
+
+get_post_id () {
+  wp post list \
+    --title="$1" \
+    --post_type=page \
+    --post_status=publish \
+    --posts_per_page=1 \
+    --format=ids
+}
+
+create_post() {
+  wp post create \
+    --post_title="$1" \
+    --post_content="$2" \
+    --post_type=page \
+    --post_status="publish"
+}
 
 wp core install --url=http://localhost:8888 \
   	--title="AV WP" \
@@ -20,6 +37,15 @@ wp core install --url=http://localhost:8888 \
   	
 wp plugin activate wp-avorg-multisite-catalog
 
-wp option get wp-avorg-multisite-catalog || wp option update --format=json wp-avorg-multisite-catalog < ./init.dev.json
+get_post_id "List" || create_post "List" "[list]"
+
+get_post_id "Detail" || create_post "Detail" \
+  "[recording_title][recording_speaker][recording_desc][recording_media]"
+
+DETAIL_ID=$(get_post_id "Detail")
+OPTIONS=$(sed "s/DETAIL_PAGE_ID/$DETAIL_ID/g" < ./init.dev.json)
+
+wp option get wp-avorg-multisite-catalog || \
+  wp option update --format=json wp-avorg-multisite-catalog "$OPTIONS"
 
 docker rm --force tmp-cli
