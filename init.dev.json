@@ -1,0 +1,12 @@
+{
+  "baseURLGraphQl": "https:\/\/graphql-staging.audioverse.org\/graphql",
+  "detailPageID": "DETAIL_PAGE_ID",
+  "site": "2",
+  "itemsPerPage": "10",
+  "playerLibrary": "https:\/\/content.jwplatform.com\/libraries\/hPrk18k3.js",
+  "playerLicense": "",
+  "overlayBackgroundColor": "rgba(0, 0, 0, 0.5)",
+  "overlayHeight": "",
+  "descriptionColor": "",
+  "descriptionLines": "6"
+}

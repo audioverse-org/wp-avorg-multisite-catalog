@@ -167,12 +167,14 @@ class Wp_Avorg_Multisite_Catalog_Admin {
 	    // All checkboxes inputs        
 		$valid = array();
 		
-		$valid['baseURLFormerAPI'] = (isset($input['baseURLFormerAPI']) && !empty($input['baseURLFormerAPI'])) ? sanitize_text_field($input['baseURLFormerAPI']) : '';
-		$valid['user'] = (isset($input['user']) && !empty($input['user'])) ? sanitize_text_field($input['user']) : '';
-		$valid['password'] = (isset($input['password']) && !empty($input['password'])) ? sanitize_text_field($input['password']) : '';
+		// $valid['baseURLFormerAPI'] = (isset($input['baseURLFormerAPI']) && !empty($input['baseURLFormerAPI'])) ? sanitize_text_field($input['baseURLFormerAPI']) : '';
+		// $valid['user'] = (isset($input['user']) && !empty($input['user'])) ? sanitize_text_field($input['user']) : '';
+		// $valid['password'] = (isset($input['password']) && !empty($input['password'])) ? sanitize_text_field($input['password']) : '';
 		
-		$valid['baseURL'] = (isset($input['baseURL']) && !empty($input['baseURL'])) ? sanitize_text_field($input['baseURL']) : '';
-		$valid['token'] = (isset($input['token']) && !empty($input['token'])) ? sanitize_text_field($input['token']) : '';
+		// $valid['baseURL'] = (isset($input['baseURL']) && !empty($input['baseURL'])) ? sanitize_text_field($input['baseURL']) : '';
+		// $valid['token'] = (isset($input['token']) && !empty($input['token'])) ? sanitize_text_field($input['token']) : '';
+
+		$valid['baseURLGraphQl'] = (isset($input['baseURLGraphQl']) && !empty($input['baseURLGraphQl'])) ? sanitize_text_field($input['baseURLGraphQl']) : '';
 
 		$valid['detailPageID'] = (isset($input['detailPageID']) && !empty($input['detailPageID'])) ? sanitize_text_field($input['detailPageID']) : '';
 		$valid['site'] = (isset($input['site']) && !empty($input['site'])) ? sanitize_text_field($input['site']) : '';

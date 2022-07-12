@@ -14,6 +14,11 @@ Access to the AudioVerse Catalog by tags, using WP shortcodes.
 
 This plugin allows to connect to the AudioVerse.org API to pull recordings filtered by tags and provides a set of shortcodes to display and format the data.
 
+Site ID : 
+
+AudioVerse : 1
+Journeys Unscripted : 2 
+
 Shortcodes:
 
 [recording_media]
@@ -26,8 +31,6 @@ Shows the description of the recording
 Shows the name of the speaker
 [list]
 Shows the list of recordings for the current site.
-[list tags=”editors”] can accept parameters, known as attributes:
-tags=”editors” the value of tags could be one value or a comma separated list of values.
 
 
 == Installation ==
@@ -43,6 +46,19 @@ the /assets directory or the directory that contains the stable readme.txt (tags
 directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
 (or jpg, jpeg, gif).
 2. This is the second screen shot
+
+== Development ==
+
+```
+docker-compose up
+chmod +x local-setup.sh
+./local-setup.sh
+open http://localhost:8888/
+open http://localhost:8888/wp-admin/
+```
+
+User: admin
+Password: password
 
 == Changelog ==
 
