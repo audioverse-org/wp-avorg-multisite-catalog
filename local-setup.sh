@@ -1,3 +1,7 @@
+# This script uses the Docker WordPress CLI image.
+# https://hub.docker.com/_/wordpress/
+# https://developer.wordpress.org/cli/commands/
+
 docker run -td \
   --name "tmp-cli" \
   --volumes-from av_wp_web \
