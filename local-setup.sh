@@ -1,4 +1,6 @@
-# This script uses the Docker WordPress CLI image.
+# This script uses the Docker WordPress CLI image to configure an already-
+# running WordPress Docker service. Run `docker-compose up` before running 
+# this script.
 # https://hub.docker.com/_/wordpress/
 # https://developer.wordpress.org/cli/commands/
 
