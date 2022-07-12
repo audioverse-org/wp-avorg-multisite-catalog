@@ -37,12 +37,17 @@ wp core install --url=http://localhost:8888 \
   	
 wp plugin activate wp-avorg-multisite-catalog
 
-get_post_id "List" || create_post "List" "[list]"
+get_post_id "List" &>/dev/null || create_post "List" "[list]"
 
-get_post_id "Detail" || create_post "Detail" \
+get_post_id "Detail" &>/dev/null || create_post "Detail" \
   "[recording_title][recording_speaker][recording_desc][recording_media]"
 
+LIST_ID=$(get_post_id "List")
 DETAIL_ID=$(get_post_id "Detail")
+
+wp option update show_on_front "page"
+wp option update page_on_front "$LIST_ID"
+
 OPTIONS=$(sed "s/DETAIL_PAGE_ID/$DETAIL_ID/g" < ./init.dev.json)
 
 wp option get wp-avorg-multisite-catalog || \
