@@ -1,12 +1,12 @@
 docker run -td \
-    --name "tmp-cli" \
-    --volumes-from av_wp_web \
-    --network container:av_wp_web \
-    -e WORDPRESS_DB_USER=dbuser \
-    -e WORDPRESS_DB_PASSWORD=dbpass \
-    -e WORDPRESS_DB_HOST=db \
-    -e WORDPRESS_DB_NAME=wordpress \
-    wordpress:cli
+  --name "tmp-cli" \
+  --volumes-from av_wp_web \
+  --network container:av_wp_web \
+  -e WORDPRESS_DB_USER=dbuser \
+  -e WORDPRESS_DB_PASSWORD=dbpass \
+  -e WORDPRESS_DB_HOST=db \
+  -e WORDPRESS_DB_NAME=wordpress \
+  wordpress:cli
 
 run () { docker exec -t tmp-cli "$@"; }
 wp () { run wp "$@"; }
@@ -28,12 +28,13 @@ create_post() {
     --post_status="publish"
 }
 
-wp core install --url=http://localhost:8888 \
-  	--title="AV WP" \
-  	--admin_user=admin \
-  	--admin_password=password \
-  	--admin_email=technical@audioverse.org \
-  	--skip-email
+wp core install \
+  --url=http://localhost:8888 \
+  --title="AudioVerse Local" \
+  --admin_user=admin \
+  --admin_password=password \
+  --admin_email=technical@audioverse.org \
+  --skip-email
   	
 wp plugin activate wp-avorg-multisite-catalog
 
