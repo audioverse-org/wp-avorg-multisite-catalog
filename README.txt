@@ -60,6 +60,11 @@ open http://localhost:8888/wp-admin/
 User: admin
 Password: password
 
+== Deployment ==
+
+Changes merged into master will automatically be deployed to the
+production environment using GitHub Actions.
+
 == Changelog ==
 
 = 1.0 =
