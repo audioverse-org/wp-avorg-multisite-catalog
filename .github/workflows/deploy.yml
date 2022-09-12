@@ -15,4 +15,4 @@ jobs:
           name: id_rsa
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: Upload plugin
-        run: rsync . master_rcfvjnddpu@161.35.9.160:${{ secrets.PRODUCTION_PATH }}
+        run: rsync --archive . master_rcfvjnddpu@161.35.9.160:${{ secrets.PRODUCTION_PATH }}
